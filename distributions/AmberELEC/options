@@ -26,7 +26,7 @@
   BUG_REPORT_URL="https://github.com/tech4bot/AmberELEC/issues"
 
 # Root password to integrate in the target system
-  ROOT_PASSWORD="pipboy"
+  ROOT_PASSWORD="chaos"
 
 # Install glibc locales to the build (yes / no)
   GLIBC_LOCALES="yes"
@@ -96,7 +96,7 @@
 # additional packages to install:
 # Space separated list is supported,
 # e.g. ADDITIONAL_PACKAGES="PACKAGE1 PACKAGE2"
-  ADDITIONAL_PACKAGES="switch-wifi-otg switch-sd"
+  ADDITIONAL_PACKAGES=""
 
 # Testpackages for development (yes / no)
   TESTING="no"
@@ -120,7 +120,7 @@
   GET_HANDLER_SUPPORT="archive git file"
 
 # Partition labels for USB/SD installation media
-  DISTRO_BOOTLABEL="PIPBOY"
+  DISTRO_BOOTLABEL="CHAOS"
   DISTRO_DISKLABEL="STORAGE"
 
 # Settings package name - blank if not required

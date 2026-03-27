@@ -38,10 +38,6 @@ RG351V:
 RG351MP:
 	DEVICE=RG351MP ARCH=aarch64 ./scripts/build_distro
 
-PIPBOY:
-	DEVICE=RG351MP ARCH=aarch64 ./scripts/build_distro
-	
-
 RG552:
 	DEVICE=RG552 ARCH=aarch64 ./scripts/build_distro
 

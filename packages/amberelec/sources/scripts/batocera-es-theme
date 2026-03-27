@@ -20,7 +20,6 @@ elif [ "${ARCH}" == "RG552" ]; then
   DEVICE="RG552"
 fi
 CONFIGDIR="/storage/.emulationstation/themes"
-# url de temas aqui
 THEMESLIST="https://raw.githubusercontent.com/AmberELEC/metadata/main/${DEVICE}/themes.cfg"
 LOCALTHEMESLIST="/storage/.config/distribution/configs/themes.txt"
 # themes.txt must be a plain file with the format 'theme_name https://githubURL' (spaces or tabs)

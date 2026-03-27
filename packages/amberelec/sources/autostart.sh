@@ -226,7 +226,7 @@ if [ "$DEVICE" == "Anbernic RG351MP" ]; then
   fi
 fi
 
-if [ "$DEVICE" == "Anbernic RG351MP" ] || [ "$DEVICE" == "PowKiddy Magicx XU10" ]; then
+if [ "$DEVICE" == "Anbernic RG351MP" ] || [ "$DEVICE" == "PowKiddy Magicx XU10" ] || [ "$DEVICE" == "Game Console R50S" ]; then
 	amixer -c 0 cset iface=MIXER,name='Playback Path' SPK_HP
 fi
 
@@ -241,7 +241,7 @@ fi
 
 # hide tools entries
 if [ "$EE_DEVICE" == "RG351MP" ]; then
-  if [ "$DEVICE" == "PowKiddy Magicx XU10" ]  || [ "$DEVICE" == "GameMT E6" ]; then
+  if [ "$DEVICE" == "PowKiddy Magicx XU10" ]  || [ "$DEVICE" == "SZDiiER D007 Plus" ]; then
     xmlstarlet ed -L -u "//game[path='./display_fix.sh']/hidden" -v "true" /storage/.config/distribution/modules/gamelist.xml
     xmlstarlet ed -L -u "//game[path='./joyleds_conf.sh']/hidden" -v "false" /storage/.config/distribution/modules/gamelist.xml
   else

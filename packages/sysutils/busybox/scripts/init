@@ -466,7 +466,7 @@ set_consolefont() {
   if [ -e /dev/fb0 ]; then
     hres="$(fbset 2>/dev/null | awk '/geometry/ { print $2 }')"
     vres="$(fbset 2>/dev/null | awk '/geometry/ { print $3 }')"
-    if [ "$DEVICE" == "Anbernic RG351V" ] || [ "$DEVICE" == "Anbernic RG351MP" ] || [ "$DEVICE" == "PowKiddy Magicx XU10" ] || [ "$DEVICE" == "GameMT E6" ]; then
+    if [ "$DEVICE" == "Anbernic RG351V" ] || [ "$DEVICE" == "Anbernic RG351MP" ] || [ "$DEVICE" == "PowKiddy Magicx XU10" ] || [ "$DEVICE" == "SZDiiER D007 Plus" ]; then
       setfont -C /dev/tty0 ter-v20n.psf
     elif [ "$DEVICE" == "Anbernic RG552" ]; then
       setfont -C /dev/tty0 ter-v32n.psf
@@ -562,6 +562,7 @@ load_splash() {
       else
         R_QUOTE="Old games, fresh fun."
       fi
+      S_DEVICE="Game Console R50S"
 
       echo -en "\033[10000H\033[2K  Device:  ${S_DEVICE}\n  Quote:   ${R_QUOTE}\n  Version: ${VERSION} (${BUILD_ID:0:7})\n  Built:   ${BUILD_DATE}\n" >/dev/console
 
@@ -773,18 +774,18 @@ mount_games() {
     do
       if [ -e "/dev/${DEV}" ] && [ ! -e "/storage/.please_resize_me" ]
       then
-        FS=$(blkid /dev/${DEV} | grep -e 'exfat' -e 'ext4' &>/dev/null)
+	FS=$(blkid /dev/${DEV} | grep -e 'exfat' -e 'ext4' &>/dev/null)
         if [ "$?" == "0" ]
-        then
+	then
           mount /dev/${DEV} /storage/roms >/dev/null 2>&1
           break
         else
-          echo "Unsupported games filesystem detected. Please reformat with exFAT or ext4."
-          echo ""
-          StartProgress countdown "Shutting down in 5... " 30 "NOW"
-          sync
-          poweroff
-        fi
+	  echo "Unsupported games filesystem detected. Please reformat with exFAT or ext4."
+	  echo ""
+	  StartProgress countdown "Shutting down in 5... " 30 "NOW"
+	  sync
+	  poweroff
+	fi
       fi
     done
 

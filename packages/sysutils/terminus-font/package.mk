@@ -6,9 +6,7 @@ PKG_VERSION="4.48"
 PKG_SHA256="34799c8dd5cec7db8016b4a615820dfb43b395575afbb24fc17ee19c869c94af"
 PKG_LICENSE="OFL1_1"
 PKG_SITE="https://terminus-font.sourceforge.net/"
-# PKG_URL="https://sourceforge.net/projects/terminus-font/files/${PKG_NAME}-${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.gz"         
-# https://sourceforge.net/projects/terminus-font/files/terminus-font-4.48/terminus-font-4.48.tar.gz/download
-
+PKG_URL="https://downloads.sourceforge.net/project/${PKG_NAME}/${PKG_NAME}-${PKG_VERSION}/${PKG_NAME}-${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_INIT="toolchain Python3:host"
 PKG_LONGDESC="This package contains the Terminus Font"
 PKG_TOOLCHAIN="manual"

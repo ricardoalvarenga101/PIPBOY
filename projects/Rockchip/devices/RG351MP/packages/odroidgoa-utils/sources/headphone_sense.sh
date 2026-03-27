@@ -8,7 +8,7 @@
 
 DEVICE=$(tr -d '\0' < /sys/firmware/devicetree/base/model)
 
-if [ "$DEVICE" = "GameMT E6" ]; then
+if [ "$DEVICE" = "SZDiiER D007 Plus" ]; then
     # set amixer to SPK_HP
     amixer -c 0 cset iface=MIXER,name='Playback Path' SPK_HP
     # set spearker gpio 0 pin 11 to enable speaker
@@ -67,7 +67,7 @@ elif [ "$DEVICE" = "PowKiddy Magicx XU10" ]; then
         ;;
         esac
     done
-elif [ "$DEVICE" = "Game Console R50S" ] || [ "$DEVICE" = "Anbernic RG351MP" ]; then
+elif [ "$DEVICE" = "Game Console R50S" ]; then
     # Switch to headphones if we have them already connected at boot
     GPIO=$(cat /sys/class/gpio/gpio86/value)
     [[ "$GPIO" == "0" ]] && set_ee_setting "audio.device" "headphone" || set_ee_setting "audio.device" "speakers"
@@ -77,7 +77,7 @@ elif [ "$DEVICE" = "Game Console R50S" ] || [ "$DEVICE" = "Anbernic RG351MP" ]; 
         /usr/bin/odroidgoa_utils.sh vol $(get_ee_setting "audio.volume")
     fi
 
-    # Headphone sensing - find rk817 headset event device dynamically
+    # Headphone sensing - detect event device dynamically
     HP_DEV=$(grep -rl "rk817 headset" /sys/class/input/*/device/name 2>/dev/null | head -1)
     DEVICE="/dev/input/$(basename $(dirname $(dirname ${HP_DEV})))"
 
@@ -87,13 +87,13 @@ elif [ "$DEVICE" = "Game Console R50S" ] || [ "$DEVICE" = "Anbernic RG351MP" ]; 
     evtest "${DEVICE}" | while read line; do
         case $line in
         (${HP_ON})
-        amixer cset name='Playback Path' HP
-        set_ee_setting "audio.device" "headphone"
-        ;;
+            amixer cset name='Playback Path' HP
+            set_ee_setting "audio.device" "headphone"
+            ;;
         (${HP_OFF})
-        amixer cset name='Playback Path' SPK
-        set_ee_setting "audio.device" "speakers"
-        ;;
+            amixer cset name='Playback Path' SPK
+            set_ee_setting "audio.device" "speakers"
+            ;;
         esac
     done
 

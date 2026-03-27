@@ -67,5 +67,34 @@ elif [ "$DEVICE" = "PowKiddy Magicx XU10" ]; then
         ;;
         esac
     done
+elif [ "$DEVICE" = "Game Console R50S" ] || [ "$DEVICE" = "Anbernic RG351MP" ]; then
+    # Switch to headphones if we have them already connected at boot
+    GPIO=$(cat /sys/class/gpio/gpio86/value)
+    [[ "$GPIO" == "0" ]] && set_ee_setting "audio.device" "headphone" || set_ee_setting "audio.device" "speakers"
+
+    if [ -e "/storage/.config/distribution/configs/distribution.conf" ]; then
+        /usr/bin/odroidgoa_utils.sh setaudio $(get_ee_setting "audio.device")
+        /usr/bin/odroidgoa_utils.sh vol $(get_ee_setting "audio.volume")
+    fi
+
+    # Headphone sensing - find rk817 headset event device dynamically
+    HP_DEV=$(grep -rl "rk817 headset" /sys/class/input/*/device/name 2>/dev/null | head -1)
+    DEVICE="/dev/input/$(basename $(dirname $(dirname ${HP_DEV})))"
+
+    HP_ON='*(SW_HEADPHONE_INSERT), value 1*'
+    HP_OFF='*(SW_HEADPHONE_INSERT), value 0*'
+
+    evtest "${DEVICE}" | while read line; do
+        case $line in
+        (${HP_ON})
+        amixer cset name='Playback Path' HP
+        set_ee_setting "audio.device" "headphone"
+        ;;
+        (${HP_OFF})
+        amixer cset name='Playback Path' SPK
+        set_ee_setting "audio.device" "speakers"
+        ;;
+        esac
+    done
 
 fi

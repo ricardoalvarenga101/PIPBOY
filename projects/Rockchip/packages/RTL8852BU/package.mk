@@ -4,12 +4,14 @@
 PKG_NAME="RTL8852BU"
 PKG_VERSION="f6aaa3c" # short hash else build fails: "Argument list too long"
 PKG_LICENSE="GPL"
-PKG_SITE="https://github.com/morrownr/rtl8852bu"
-PKG_URL="${PKG_SITE}/archive/${PKG_VERSION}.tar.gz"
+PKG_SITE="https://github.com/morrownr/rtl8852bu-20240418"
+# PKG_URL="${PKG_SITE}/archive/${PKG_VERSION}.tar.gz"   # ← remover o #
+PKG_SHA256="4a86a0686242703ecabd0ae12063f7055a7324fe416974bef73786e4e98b31da"
 PKG_DEPENDS_TARGET="toolchain linux"
 PKG_NEED_UNPACK="${LINUX_DEPENDS}"
 PKG_LONGDESC="Realtek RTL8852BU/RTL8832BU Linux 4.4-5.x driver"
 PKG_IS_KERNEL_PKG="yes"
+PKG_TOOLCHAIN="manual"
 
 pre_make_target() {
   unset LDFLAGS

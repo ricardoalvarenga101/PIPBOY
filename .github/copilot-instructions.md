@@ -224,6 +224,26 @@ When adding support for a new device:
 
 ---
 
+## DTB / DTS de Referência (r50s-dtb/)
+
+Os arquivos DTB e DTS do dispositivo **Game Console R50S** usados por esta imagem estão em:
+
+```
+r50s-dtb/
+├── rk3326-r50s-linux.dtb   ← binário compilado, usado no boot
+└── rk3326-r50s-linux.dts   ← fonte legível, referência canônica
+```
+
+**Estes arquivos devem ser usados como referência primária** para qualquer dúvida sobre:
+- Pinagem de GPIOs (headphone detect, botões, LEDs)
+- Configuração de periféricos (codec de áudio rk817, ADC keys, Wi-Fi, etc.)
+- Compatibilidade de device drivers com esta imagem
+- Nomes de nós e propriedades do devicetree esperados pelos scripts de runtime
+
+Sempre que houver dúvida sobre GPIOs ou mapeamento de hardware para o R50S, consultar o `r50s-dtb/rk3326-r50s-linux.dts` antes de qualquer outra fonte.
+
+---
+
 ## Boot Chain (RG351MP / RK3326)
 
 ```

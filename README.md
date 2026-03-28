@@ -69,7 +69,7 @@ Se não retornar erro, está correto. Verifique com:
 df -h | grep externo
 Dica: Se o HD for NTFS, substitua ext4 por ntfs-3g e instale o pacote: sudo apt install ntfs-3g. Se for exFAT, use exfat-fuse e exfat como tipo.
 
-make PIPBOY 2>&1 | tee build_pipboy.log
+make RG351MP 2>&1 | tee build_pipboy.log
 
 
 

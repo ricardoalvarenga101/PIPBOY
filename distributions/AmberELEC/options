@@ -11,7 +11,7 @@
   HARDENING_SUPPORT="no"
 
 # Name of the Distro to build (full name, without special characters)
-  DISTRONAME="cHAos"
+  DISTRONAME="PipBoy"
 
 # short project description
   DESCRIPTION="An Open Source firmware."
@@ -26,7 +26,7 @@
   BUG_REPORT_URL="https://github.com/tech4bot/AmberELEC/issues"
 
 # Root password to integrate in the target system
-  ROOT_PASSWORD="chaos"
+  ROOT_PASSWORD="pipboy"
 
 # Install glibc locales to the build (yes / no)
   GLIBC_LOCALES="yes"
@@ -120,7 +120,7 @@
   GET_HANDLER_SUPPORT="archive git file"
 
 # Partition labels for USB/SD installation media
-  DISTRO_BOOTLABEL="CHAOS"
+  DISTRO_BOOTLABEL="PIPBOY"
   DISTRO_DISKLABEL="STORAGE"
 
 # Settings package name - blank if not required

@@ -4,8 +4,8 @@ git ls-remote --heads https://github.com/LIJI32/SameBoy.git
 
 
 exemplo de limpar e recompilar um nucleo
-rm -rf build.cHAos-RG351MP.aarch64/mame2016-*
-rm -f build.cHAos-RG351MP.aarch64/.stamps/mame2016/*
+rm -rf build.PipBoy-RG351MP.aarch64/mame2016-*
+rm -f build.PipBoy-RG351MP.aarch64/.stamps/mame2016/*
 DEVICE=RG351MP ARCH=aarch64 ./scripts/build mame2016
 
 
@@ -74,3 +74,5 @@ make RG351MP 2>&1 | tee build_pipboy.log
 
 
 GameMT E6
+
+make RG351MP V=1 VERBOSE=1

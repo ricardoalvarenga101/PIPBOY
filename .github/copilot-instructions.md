@@ -1,11 +1,11 @@
-# Copilot Instructions — cHAos (AmberELEC fork)
+# Copilot Instructions — PipBoy (AmberELEC fork)
 
 ## Project Overview
 
-This is **cHAos**, a custom fork of [AmberELEC](https://github.com/AmberELEC/AmberELEC), which is an open-source Linux firmware for Rockchip-based handheld gaming devices.  
+This is **PipBoy**, a custom fork of [AmberELEC](https://github.com/AmberELEC/AmberELEC), which is an open-source Linux firmware for Rockchip-based handheld gaming devices.  
 The build system is derived from LibreELEC/CoreELEC and uses a custom shell-script-driven toolchain.
 
-- **Distro name**: `cHAos` (set in `distributions/AmberELEC/options`)
+- **Distro name**: `PipBoy` (set in `distributions/AmberELEC/options`)
 - **Upstream base**: AmberELEC → EmuELEC → CoreELEC → LibreELEC
 - **Workspace root**: `/home/rialvarenga/ae/`
 
@@ -33,7 +33,7 @@ The **RG351MP** device also covers hardware variants that share the same kernel/
 ae/
 ├── config/               # Global build config (functions, path, arch.*, options)
 ├── distributions/
-│   └── AmberELEC/        # Distro-level options (DISTRONAME="cHAos", audio, BT, etc.)
+│   └── AmberELEC/        # Distro-level options (DISTRONAME="PipBoy", audio, BT, etc.)
 ├── packages/             # Generic packages (devel, emulators, etc.)
 │   └── devel/
 │       ├── ccache/       # ccache:host — generates host-gcc/host-g++ wrapper scripts
@@ -71,7 +71,7 @@ ae/
 ├── target/               # Final output images
 ├── tools/                # Host tools (mkimage, etc.)
 ├── Makefile              # Convenience targets: make RG351MP, make world, etc.
-└── build.cHAos-RG351MP.aarch64/   # Build output directory (generated)
+└── build.PipBoy-RG351MP.aarch64/   # Build output directory (generated)
     ├── toolchain/         # Cross-compilation toolchain (gcc, binutils, glibc)
     ├── .stamps/           # Build state stamps (unpack/build/install per package)
     └── linux-<hash>/      # Kernel source tree
@@ -98,7 +98,7 @@ make clean         # removes build.* dirs
 make distclean     # also removes .ccache*
 ```
 
-Build output lands in `build.cHAos-RG351MP.aarch64/` and the final image in `target/`.
+Build output lands in `build.PipBoy-RG351MP.aarch64/` and the final image in `target/`.
 
 ---
 
@@ -110,8 +110,8 @@ Build output lands in `build.cHAos-RG351MP.aarch64/` and the final image in `tar
   - `pre_patch()`, `post_patch()` — run before/after patch application
   - `pre_make_target()`, `make_target()`, `post_makeinstall_target()` — target build
   - `pre_make_host()`, `make_host()`, `post_makeinstall_host()` — host build
-- Stamps are stored in `build.cHAos-RG351MP.aarch64/.stamps/<package>/`; deleting a stamp forces that phase to re-run.
-- The toolchain is assembled in `build.cHAos-RG351MP.aarch64/toolchain/`.
+- Stamps are stored in `build.PipBoy-RG351MP.aarch64/.stamps/<package>/`; deleting a stamp forces that phase to re-run.
+- The toolchain is assembled in `build.PipBoy-RG351MP.aarch64/toolchain/`.
 - `config/functions` defines global helpers (`die`, `get_build_dir`, `get_pkg_directory`, etc.).
 - `config/path` defines `BUILD`, `STAMPS`, `TOOLCHAIN` variables.
 
@@ -136,10 +136,10 @@ FAILURE: scripts/install linux
 
 **Fix:**
 ```bash
-KERNEL_SRC=build.cHAos-RG351MP.aarch64/linux-7843036b70b7d6fc891e07158f06b6f7d74fe33d
+KERNEL_SRC=build.PipBoy-RG351MP.aarch64/linux-7843036b70b7d6fc891e07158f06b6f7d74fe33d
 rm -rf ${KERNEL_SRC}/fs/exfat ${KERNEL_SRC}/fs/exfat-linux
-rm -f build.cHAos-RG351MP.aarch64/.stamps/linux/build_target
-rm -f build.cHAos-RG351MP.aarch64/.stamps/linux/install_target
+rm -f build.PipBoy-RG351MP.aarch64/.stamps/linux/build_target
+rm -f build.PipBoy-RG351MP.aarch64/.stamps/linux/install_target
 ```
 
 ---
@@ -154,13 +154,13 @@ The toolchain contains binaries and scripts with **absolute paths baked in at bu
 
 **If the project directory is moved**, the entire toolchain must be rebuilt:
 ```bash
-rm -rf build.cHAos-RG351MP.aarch64/toolchain
-rm -rf build.cHAos-RG351MP.aarch64/.stamps
+rm -rf build.PipBoy-RG351MP.aarch64/toolchain
+rm -rf build.PipBoy-RG351MP.aarch64/.stamps
 ```
 
 To find remaining stale path references:
 ```bash
-grep -rl "/old/path/here" build.cHAos-RG351MP.aarch64/ --include="*.sh" --include="*.py" --include="Makefile" --include="*.cmake" --include="*.pc" --include="libtool" --include="config.status"
+grep -rl "/old/path/here" build.PipBoy-RG351MP.aarch64/ --include="*.sh" --include="*.py" --include="Makefile" --include="*.cmake" --include="*.pc" --include="libtool" --include="config.status"
 ```
 
 ---
@@ -176,15 +176,15 @@ RPATH in a host binary points to old toolchain path. Rebuild toolchain (delete `
 ### `cd: .x86_64-linux-gnu: No such file or directory` (e.g. libcap)
 `post_unpack()` creates hidden subdirectories that were deleted during cleanup. Fix: re-extract the package:
 ```bash
-rm -rf build.cHAos-RG351MP.aarch64/libcap-2.46
-rm -f build.cHAos-RG351MP.aarch64/.stamps/libcap/unpack
+rm -rf build.PipBoy-RG351MP.aarch64/libcap-2.46
+rm -f build.PipBoy-RG351MP.aarch64/.stamps/libcap/unpack
 ```
 
 ### `cmake: error while loading shared libraries: libssl.so.1.1`
 cmake binary RPATH broken or `CMakeCache.txt` stale from old path:
 ```bash
-rm -rf build.cHAos-RG351MP.aarch64/cmake-*
-rm -f build.cHAos-RG351MP.aarch64/.stamps/cmake/*
+rm -rf build.PipBoy-RG351MP.aarch64/cmake-*
+rm -f build.PipBoy-RG351MP.aarch64/.stamps/cmake/*
 ```
 
 ### RTL driver fails: `libpython3.11.so.1.0: cannot open shared object file`
@@ -224,26 +224,6 @@ When adding support for a new device:
 
 ---
 
-## DTB / DTS de Referência (r50s-dtb/)
-
-Os arquivos DTB e DTS do dispositivo **Game Console R50S** usados por esta imagem estão em:
-
-```
-r50s-dtb/
-├── rk3326-r50s-linux.dtb   ← binário compilado, usado no boot
-└── rk3326-r50s-linux.dts   ← fonte legível, referência canônica
-```
-
-**Estes arquivos devem ser usados como referência primária** para qualquer dúvida sobre:
-- Pinagem de GPIOs (headphone detect, botões, LEDs)
-- Configuração de periféricos (codec de áudio rk817, ADC keys, Wi-Fi, etc.)
-- Compatibilidade de device drivers com esta imagem
-- Nomes de nós e propriedades do devicetree esperados pelos scripts de runtime
-
-Sempre que houver dúvida sobre GPIOs ou mapeamento de hardware para o R50S, consultar o `r50s-dtb/rk3326-r50s-linux.dts` antes de qualquer outra fonte.
-
----
-
 ## Boot Chain (RG351MP / RK3326)
 
 ```
@@ -276,18 +256,18 @@ Build failures in these packages are often caused by:
 
 ```bash
 # Force re-unpack of a package
-rm -rf build.cHAos-RG351MP.aarch64/<package-version-dir>
-rm -f build.cHAos-RG351MP.aarch64/.stamps/<package>/unpack
+rm -rf build.PipBoy-RG351MP.aarch64/<package-version-dir>
+rm -f build.PipBoy-RG351MP.aarch64/.stamps/<package>/unpack
 
 # Force rebuild (keep sources)
-rm -f build.cHAos-RG351MP.aarch64/.stamps/<package>/build_target
-rm -f build.cHAos-RG351MP.aarch64/.stamps/<package>/install_target
+rm -f build.PipBoy-RG351MP.aarch64/.stamps/<package>/build_target
+rm -f build.PipBoy-RG351MP.aarch64/.stamps/<package>/install_target
 
 # Build a single package in isolation
 DEVICE=RG351MP ARCH=aarch64 ./scripts/build <package_name>
 
 # Check what a package stamp directory contains
-ls build.cHAos-RG351MP.aarch64/.stamps/<package>/
+ls build.PipBoy-RG351MP.aarch64/.stamps/<package>/
 ```
 
 ---
@@ -296,11 +276,11 @@ ls build.cHAos-RG351MP.aarch64/.stamps/<package>/
 
 | Variable       | Value                                              |
 |----------------|----------------------------------------------------|
-| `BUILD`        | `build.cHAos-RG351MP.aarch64`                     |
+| `BUILD`        | `build.PipBoy-RG351MP.aarch64`                     |
 | `TOOLCHAIN`    | `$BUILD/toolchain`                                 |
 | `STAMPS`       | `$BUILD/.stamps`                                   |
 | `TARGET_ARCH`  | `aarch64`                                          |
 | `TARGET_NAME`  | `aarch64-libreelec-linux-gnu`                      |
-| `DISTRONAME`   | `cHAos`                                            |
+| `DISTRONAME`   | `PipBoy`                                            |
 | `PROJECT`      | `Rockchip`                                         |
 | `DEVICE`       | `RG351MP`                                          |

@@ -1,43 +1,59 @@
-![GitHub-Mark-Dark](https://raw.githubusercontent.com/AmberELEC/website/gh-pages/docs/images/transparent_amber_elec_horiz.svg#gh-dark-mode-only)
-![GitHub-Mark-Light](https://raw.githubusercontent.com/AmberELEC/website/gh-pages/docs/images/transparent_black_amber_elec_horiz.svg#gh-light-mode-only)
-[![GitHub Release](https://img.shields.io/github/release/AmberELEC/AmberELEC.svg?label=latest%20release&style=flat-square&labelColor=black&color=gold)](https://github.com/AmberELEC/AmberELEC/releases/latest)
-[![Downloads Latest](https://img.shields.io/github/downloads/AmberELEC/AmberELEC/latest/total?label=downloads%40latest%20release&style=flat-square&labelColor=black&color=gold)](https://github.com/AmberELEC/AmberELEC/releases/latest)
-[![Downloads Prerelease](https://img.shields.io/github/downloads/AmberELEC/AmberELEC-prerelease/total?label=downloads%40prerelease%20builds&style=flat-square&labelColor=black&color=gold)](https://github.com/AmberELEC/AmberELEC-prerelease/releases)
-[![Discord](https://img.shields.io/discord/777665344289898536?logo=discord&label=Discord&labelColor=black&color=gold)](https://discord.gg/W9F9xxRseu)
+# PIPBOY Game Console R50S / RG351MP
+
+![Splash do PIPBOY](https://raw.githubusercontent.com/AmberELEC/website/gh-pages/docs/images/transparent_amber_elec_horiz.svg)
+
+![Splash Screen](../splash.png)
+
 ---
-An open source firmware for the Anbernic RG351P/M/V/MP, RG552 and other compatible devices (see listing below).
 
-AmberELEC (formerly know as 351ELEC) is a fork of [EmuELEC](https://github.com/EmuELEC/EmuELEC) which is based on [CoreELEC](https://github.com/CoreELEC/CoreELEC), [Lakka](https://github.com/libretro/Lakka-LibreELEC), and [Batocera](https://github.com/batocera-linux/batocera.linux).
+Firmware customizado e open source para os consoles portáteis **Game Console R50S** e **Anbernic RG351MP** baseados no SoC **Rockchip RK3326**.
 
-We have a [Website](https://amberelec.org) with [installation instructions](https://amberelec.org/installation#overview) and a lot of information on how to [get started using AmberELEC](https://amberelec.org/guides/getting-to-know-amberelec).
+Este projeto é compatível com:
+- **Game Console R50S**
+- **Anbernic RG351MP**
+- Outros dispositivos baseados em RK3326 (com adaptações)
 
-Visit us on our Discord! https://discord.gg/W9F9xxRseu
+## Especificações Técnicas
+- **SoC:** Rockchip RK3326
+- **CPU:** Quad-Core ARM Cortex-A35
+- **GPU:** Mali-G31 MP2
+- **RAM:** 1GB DDR3L
+- **Tela:** IPS 3.5" 480x320 (R50S) / 640x480 (RG351MP)
+- **Armazenamento:** microSD
+- **Áudio:** Codec RK817, alto-falante estéreo, saída P2
+- **Conectividade:** Wi-Fi (opcional), USB-C, OTG
+- **Sistema:** Linux customizado (AmberELEC/PIPBOY)
 
-## Supported Devices
-<!--devices-->
-<table>
-  <tr>
-    <td align="center" width="70" nowrap="nowrap">SoC</td>
-    <td align="center" width="150" nowrap="nowrap">Manufacturer</td>
-    <td align="center" width="150" nowrap="nowrap">Device</td>
-  </tr>
-  <tr>
-    <td>RK3399</td>
-    <td>Anbernic</td>
-    <td>RG552</td>
-  </tr>  
-  <tr>
-    <td rowspan="10">RK3326</td>
-    <td rowspan="4">Anbernic</td>
-    <td>RG351P</td>
-  </tr>
-  <tr>
-    <td>RG351M<sup>[1]</sup></td>
-  </tr>
-  <tr>
-    <td>RG351V<sup>[2]</sup></td>
-  </tr>
-  <tr>
+## Compatibilidade de Firmware
+- **Firmware:** AmberELEC, PIPBOY, custom builds
+- **Kernel:** Linux 5.x customizado para RK3326
+- **Device Tree:** rk3326-r50s-linux.dts, rk3326-rg351mp-linux.dts
+- **Bootloader:** U-Boot customizado
+
+## Como Clonar o Projeto
+```bash
+git clone https://github.com/seuusuario/001-pipboy.git
+cd 001-pipboy
+```
+
+## Como Compilar
+```bash
+make RG351MP
+```
+Ou para outros dispositivos, ajuste o alvo conforme necessário.
+
+## Como Subir para o Cartão SD
+1. Compile a imagem conforme instruções acima.
+2. Grave a imagem no cartão microSD usando o balenaEtcher, dd ou ferramenta similar.
+3. Insira o cartão no console e ligue o dispositivo.
+
+## Créditos
+- Projeto baseado em AmberELEC, EmuELEC, CoreELEC, Lakka e Batocera.
+- Splash screen e customizações por rsalvarenga.
+
+---
+
+> Para dúvidas, consulte a [wiki oficial](https://amberelec.org) ou entre no [Discord](https://discord.gg/W9F9xxRseu).
     <td>RG351MP<sup>[2]</sup></td>
   </tr>
   <tr>

@@ -57,3 +57,4 @@ lib32-package/
 .lastbuild
 .build_pipboy.log
 build_pipboy.log
+/devtools

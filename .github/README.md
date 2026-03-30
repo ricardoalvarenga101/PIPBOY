@@ -1,12 +1,10 @@
 # PIPBOY Game Console R50S / RG351MP
 
-![Splash do PIPBOY](https://raw.githubusercontent.com/AmberELEC/website/gh-pages/docs/images/transparent_amber_elec_horiz.svg)
-
-![Splash Screen](../splash.png)
+![Splash Screen](https://github.com/ricardoalvarenga101/PIPBOY/blob/r50s-configuration/distributions/AmberELEC/splash/splash-854l.png?raw=true)
 
 ---
 
-Firmware customizado e open source para os consoles portáteis **Game Console R50S** e **Anbernic RG351MP** baseados no SoC **Rockchip RK3326**.
+Firmware customizado e open source para os consoles portáteis **Game Console R50S** baseados no SoC **Rockchip RK3326**.
 
 Este projeto é compatível com:
 - **Game Console R50S**

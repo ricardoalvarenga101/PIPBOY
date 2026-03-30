@@ -232,7 +232,7 @@ fi
 
 # Initialize audio so the softvol mixer is created and audio is allowed to be changed
 # - This is the shortest, totally silent .wav I could create with audacity - duration is .001 seconds
-timeout 5 aplay /usr/bin/emustation-config-init.wav || true
+timeout 1 aplay /usr/bin/emustation-config-init.wav || true
 
 if [ "$EE_DEVICE" == "RG552" ] || [[ "$EE_DEVICE" =~ RG351 ]]; then
   # For some reason the audio is being reseted to 100 at boot, so we reapply the saved settings here

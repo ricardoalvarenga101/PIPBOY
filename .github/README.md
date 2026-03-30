@@ -2,7 +2,7 @@
 
 ![Splash do PIPBOY](https://raw.githubusercontent.com/AmberELEC/website/gh-pages/docs/images/transparent_amber_elec_horiz.svg)
 
-![Splash Screen](../splash.png)
+![Splash Screen](../distributions/AmberELEC/splash/splash-854l.png)
 
 ---
 

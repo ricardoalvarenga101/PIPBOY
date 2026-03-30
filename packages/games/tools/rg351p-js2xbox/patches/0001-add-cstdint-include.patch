@@ -1,0 +1,10 @@
+diff --git a/src/events.h b/src/events.h
+--- a/src/events.h
++++ b/src/events.h
+@@ -22,6 +22,7 @@
+ 
+ #include <string>
+ #include <dirent.h>
++#include <cstdint>
+ 
+ namespace events {

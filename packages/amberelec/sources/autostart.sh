@@ -226,13 +226,13 @@ if [ "$DEVICE" == "Anbernic RG351MP" ]; then
   fi
 fi
 
-if [ "$DEVICE" == "Anbernic RG351MP" ] || [ "$DEVICE" == "PowKiddy Magicx XU10" ]; then
+if [ "$DEVICE" == "Anbernic RG351MP" ] || [ "$DEVICE" == "PowKiddy Magicx XU10" ] || [ "$DEVICE" == "Game Console R50S" ]; then
 	amixer -c 0 cset iface=MIXER,name='Playback Path' SPK_HP
 fi
 
 # Initialize audio so the softvol mixer is created and audio is allowed to be changed
 # - This is the shortest, totally silent .wav I could create with audacity - duration is .001 seconds
-aplay /usr/bin/emustation-config-init.wav
+timeout 5 aplay /usr/bin/emustation-config-init.wav || true
 
 if [ "$EE_DEVICE" == "RG552" ] || [[ "$EE_DEVICE" =~ RG351 ]]; then
   # For some reason the audio is being reseted to 100 at boot, so we reapply the saved settings here

@@ -10,6 +10,11 @@ PKG_URL="${PKG_SITE}.git"
 PKG_DEPENDS_TARGET="toolchain"
 PKG_TOOLCHAIN="make"
 
+PKG_MAKE_OPTS_TARGET="CPPC=${TARGET_PREFIX}g++ LINK=${TARGET_PREFIX}g++"
+
+pre_make_target() {
+  rm -rf obj/
+}
 makeinstall_target() {
   mkdir -p ${INSTALL}/usr/bin
   cp rg351p-js2xbox ${INSTALL}/usr/bin

@@ -17,6 +17,11 @@ pre_configure_target() {
   CXXFLAGS+=" -I$(get_build_dir glibc)/sysdeps/unix/sysv/linux/x86"
 }
 
+pre_configure_target() {
+  export TERM=xterm
+  CXXFLAGS+=" -I$(get_build_dir glibc)/sysdeps/unix/sysv/linux/x86"
+}
+
 makeinstall_target() {
   mkdir -p ${INSTALL}/usr/lib/libretro
   cp ${PKG_BUILD}/emuscv_libretro.so ${INSTALL}/usr/lib/libretro/

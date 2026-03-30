@@ -5,9 +5,9 @@
 
 PKG_NAME="linux"
 if [[ "${DEVICE}" =~ RG351 ]]; then
-  PKG_VERSION="7843036b70b7d6fc891e07158f06b6f7d74fe33d"
+  PKG_VERSION="9028022692284a7ec2ca1f80f9a7471ab1190903"
   PKG_GIT_CLONE_BRANCH="r50s"
-  PKG_URL="https://github.com/tech4bot/kernel_rg351/archive/${PKG_VERSION}.tar.gz"
+  PKG_URL="https://github.com/ricardoalvarenga101/kernel_rg351/archive/${PKG_VERSION}.tar.gz"
 elif [[ "${DEVICE}" =~ RG552 ]]; then
   PKG_VERSION="0c15ff851c1d24fac588bd4427bb45b9ab88f452"
   PKG_URL="https://github.com/AmberELEC/kernel_rg552/archive/${PKG_VERSION}.tar.gz"

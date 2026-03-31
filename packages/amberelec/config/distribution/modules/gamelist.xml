@@ -12,9 +12,21 @@
 		<genre>Script</genre>
 		<thumbnail>./downloaded_images/filemanager-thumb.png</thumbnail>
 		<image>./downloaded_images/filemanager.png</image>	
+	<!-- <game>
+		<path>./games_to_sd.sh</path>
+		<name>Games to SD</name>
+		<desc>Mapeia jogos, saves e configs para um novo diretório (ex: SD externo), substituindo o GAMES padrão. Permite reverter.</desc>
+		<developer>AmberELEC</developer>
+		<publisher>AmberELEC</publisher>
+		<rating>1.0</rating>
+		<releasedate>2026</releasedate>
+		<genre>Script</genre>
+		<thumbnail>./downloaded_images/games_to_sd-thumb.png</thumbnail>
+		<image>./downloaded_images/games_to_sd.png</image>
+	</game> -->
 	</game>
 
-	<game>
+	<!-- <game>
 		<path>./wifi_toggle_otg.sh</path>
 		<name>Wifi Toggle (OTG)</name>
 		<desc>Alterna entre o Wi-Fi nativo e o Wi-Fi via OTG (USB-C). Permite ativar o adaptador OTG e reverter para o Wi-Fi interno.</desc>
@@ -25,7 +37,7 @@
 		<genre>Script</genre>
 		<thumbnail>./downloaded_images/wifi-toggle-thumb.png</thumbnail>
 		<image>./downloaded_images/wifi-toggle.png</image>
-	</game>
+	</game> -->
 
 	<game>
 		<path>./Start PPSSPP.sh</path>
@@ -105,7 +117,7 @@
 		<image>./downloaded_images/clean.png</image>
 	</game>
 
-	<game>
+	<!-- <game>
 		<path>./usbmount.sh</path>
 		<name>Mount/Unmount USB drive</name>
 		<desc>Mounts/Unmounts a USB drive connected to the OTG port</desc>
@@ -116,7 +128,7 @@
 		<genre>Script</genre>
 		<thumbnail>./downloaded_images/usb-thumb.png</thumbnail>
 		<image>./downloaded_images/usb.png</image>
-	</game>
+	</game> -->
 
 	<game>
 		<path>./psx_create_m3u.sh</path>
@@ -209,7 +221,7 @@
 		<image>./downloaded_images/ppsspp_migrate.png</image>
 	</game>
 
-	<game>
+	<!-- <game>
 		<path>./display_fix.sh</path>
 		<hidden>false</hidden>
 		<name>Display timing Fix</name>
@@ -221,7 +233,7 @@
 		<genre>Script</genre>
 		<thumbnail>./downloaded_images/timing-thumb.png</thumbnail>
 		<image>./downloaded_images/timing.png</image>
-	</game>
+	</game> -->
 
 	<game>
 		<path>./joyleds_conf.sh</path>

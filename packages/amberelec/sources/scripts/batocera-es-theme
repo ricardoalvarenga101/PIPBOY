@@ -20,7 +20,8 @@ elif [ "${ARCH}" == "RG552" ]; then
   DEVICE="RG552"
 fi
 CONFIGDIR="/storage/.emulationstation/themes"
-THEMESLIST="https://raw.githubusercontent.com/AmberELEC/metadata/main/${DEVICE}/themes.cfg"
+# THEMESLIST="https://raw.githubusercontent.com/AmberELEC/metadata/main/${DEVICE}/themes.cfg"
+THEMESLIST="https://raw.githubusercontent.com/ricardoalvarenga101/pipboy-themes/refs/heads/master/themes.cfg"
 LOCALTHEMESLIST="/storage/.config/distribution/configs/themes.txt"
 # themes.txt must be a plain file with the format 'theme_name https://githubURL' (spaces or tabs)
 # Example of a themes.txt file:

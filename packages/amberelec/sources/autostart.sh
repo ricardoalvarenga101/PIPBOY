@@ -280,25 +280,25 @@ if ! [ -f /storage/.config/quotes ]; then
 fi
 
 # Força rotação de tela, idioma e rotação do RetroArch para Game Console R50S
-if [ "$DEVICE" == "Game Console R50S" ]; then
-  ES_CFG="/storage/.config/emulationstation/es_settings.cfg"
-  if [ -f "$ES_CFG" ]; then
-    if grep -q 'ScreenRotate' "$ES_CFG"; then
-      xmlstarlet ed -L -u '//int[@name="ScreenRotate"]/@value' -v "2" "$ES_CFG"
-    else
-      xmlstarlet ed -L -s '/config' -t elem -n 'int' -v '' \
-        -i '//int[not(@name)]' -t attr -n 'name' -v 'ScreenRotate' \
-        -i '//int[@name="ScreenRotate" and not(@value)]' -t attr -n 'value' -v '2' \
-        "$ES_CFG"
-    fi
-  fi
-  # Força rotação de vídeo no RetroArch
-  # RACONF="/storage/roms/gamedata/retroarch/retroarch.cfg"
-  # if [ -f "$RACONF" ]; then
-  #   sed -i '/^video_rotation\s*=/d' "$RACONF"
-  #   echo 'video_rotation = "2"' >> "$RACONF"
-  # fi
-fi
+# if [ "$DEVICE" == "Game Console R50S" ]; then
+#   ES_CFG="/storage/.config/emulationstation/es_settings.cfg"
+#   if [ -f "$ES_CFG" ]; then
+#     if grep -q 'ScreenRotate' "$ES_CFG"; then
+#       xmlstarlet ed -L -u '//int[@name="ScreenRotate"]/@value' -v "2" "$ES_CFG"
+#     else
+#       xmlstarlet ed -L -s '/config' -t elem -n 'int' -v '' \
+#         -i '//int[not(@name)]' -t attr -n 'name' -v 'ScreenRotate' \
+#         -i '//int[@name="ScreenRotate" and not(@value)]' -t attr -n 'value' -v '2' \
+#         "$ES_CFG"
+#     fi
+#   fi
+#   # Força rotação de vídeo no RetroArch
+#   # RACONF="/storage/roms/gamedata/retroarch/retroarch.cfg"
+#   # if [ -f "$RACONF" ]; then
+#   #   sed -i '/^video_rotation\s*=/d' "$RACONF"
+#   #   echo 'video_rotation = "2"' >> "$RACONF"
+#   # fi
+# fi
 
 # What to start at boot?
 DEFE=$(get_ee_setting ee_boot)

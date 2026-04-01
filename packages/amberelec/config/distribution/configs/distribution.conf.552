@@ -87,6 +87,7 @@ system.timezone=Europe/London
 ## Automatically check for updates at start (0,1)
 updates.enabled=1
 updates.type=release
+global.themes.url=https://raw.githubusercontent.com/ricardoalvarenga101/pipboy-themes/refs/heads/master/themes.json
 
 # fan profile - controls fan speed (values: default/performance/quiet)
 fan.profile=default

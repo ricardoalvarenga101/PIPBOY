@@ -11,7 +11,20 @@
 		<releasedate>2021</releasedate>
 		<genre>Script</genre>
 		<thumbnail>./downloaded_images/filemanager-thumb.png</thumbnail>
-		<image>./downloaded_images/filemanager.png</image>
+		<image>./downloaded_images/filemanager.png</image>	
+	</game>
+
+	<game>
+		<path>./wifi_toggle_otg.sh</path>
+		<name>Wifi Toggle (OTG)</name>
+		<desc>Alterna entre o Wi-Fi nativo e o Wi-Fi via OTG (USB-C). Permite ativar o adaptador OTG e reverter para o Wi-Fi interno.</desc>
+		<developer>rsalvarenga</developer>
+		<publisher>rsalvarenga</publisher>
+		<rating>1.0</rating>
+		<releasedate>2026</releasedate>
+		<genre>Script</genre>
+		<thumbnail>./downloaded_images/wifi-toggle-thumb.png</thumbnail>
+		<image>./downloaded_images/wifi-toggle.png</image>
 	</game>
 
 	<game>

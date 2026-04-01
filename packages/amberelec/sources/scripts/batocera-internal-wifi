@@ -20,10 +20,20 @@ do_disable() {
   _refresh_connman
 }
 _enable() {
-  echo 1 > "$GPIO_WIFI_DEVICE"
+  if [ "$USE_RFKILL" == "1" ]; then
+    RFKILL_ID=$(rfkill list | awk -F: '/phy0/{print $1}' | head -1)
+    [ -n "$RFKILL_ID" ] && rfkill unblock "$RFKILL_ID"
+  else
+    echo 1 > "$GPIO_WIFI_DEVICE"
+  fi
 }
 _disable() {
-  echo 0 > "$GPIO_WIFI_DEVICE"
+  if [ "$USE_RFKILL" == "1" ]; then
+    RFKILL_ID=$(rfkill list | awk -F: '/phy0/{print $1}' | head -1)
+    [ -n "$RFKILL_ID" ] && rfkill block "$RFKILL_ID"
+  else
+    echo 0 > "$GPIO_WIFI_DEVICE"
+  fi
 }
 
 _refresh_connman() {
@@ -44,6 +54,7 @@ _refresh_connman() {
 
 
 DEVICE_MODEL=$(tr -d '\0' < /sys/firmware/devicetree/base/model)
+USE_RFKILL=0
 if [ "$DEVICE_MODEL" == "Anbernic RG552" ]; then
   GPIO_WIFI_DEVICE="/sys/class/gpio/gpio113/value"
 elif [ "$DEVICE_MODEL" == "Anbernic RG351P" ]; then
@@ -51,8 +62,8 @@ elif [ "$DEVICE_MODEL" == "Anbernic RG351P" ]; then
 elif [ "$DEVICE_MODEL" == "Anbernic RG351V" ]; then
   GPIO_WIFI_DEVICE="/sys/class/gpio/gpio5/value"
 else
-  echo "$0 does not support: $DEVICE_MODEL"
-  exit 1
+  # R50S, RG351MP e outros: WiFi sem GPIO dedicado — usar rfkill (soft block)
+  USE_RFKILL=1
 fi
 
 case "${ACTION}" in

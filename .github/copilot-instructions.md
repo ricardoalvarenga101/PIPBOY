@@ -348,6 +348,103 @@ O `autostart.sh` sincroniza `/usr/config/distribution/` → `/storage/.config/di
 
 ---
 
+## Módulo WiFi OTG Toggle
+
+O R50S tem WiFi interno embarcado (chip 2.4GHz via SDIO) que conflita com adaptadores USB externos conectados via porta OTG. O módulo `wifi_toggle_otg.sh` permite chavear entre os dois, com persistência entre reinicializações.
+
+### Arquivos envolvidos
+
+| Arquivo | Função |
+|---|---|
+| `packages/amberelec/config/distribution/modules/wifi_toggle_otg.sh` | Módulo de UI — exibido em **Tools** no EmulationStation |
+| `packages/amberelec/sources/scripts/batocera-internal-wifi` | Script que efetua o enable/disable do chip interno |
+| `packages/amberelec/sources/autostart.sh` | Lê `wifi.internal.disabled` no boot e chama o script acima |
+| `packages/amberelec/config/distribution/modules/gamelist.xml` | Registro do módulo na lista de Tools do ES |
+
+### Mecanismo de controle por device
+
+O `batocera-internal-wifi` detecta o hardware em runtime via `/sys/firmware/devicetree/base/model`:
+
+| Device | Mecanismo | GPIO / Recurso |
+|---|---|---|
+| Anbernic RG552 | GPIO hard power | `gpio113` |
+| Anbernic RG351P | GPIO hard power | `gpio110` |
+| Anbernic RG351V | GPIO hard power | `gpio5` |
+| **Game Console R50S** | **rfkill (soft block)** | `phy0` |
+| **Anbernic RG351MP** | **rfkill (soft block)** | `phy0` |
+| outros | **rfkill (soft block)** | `phy0` |
+
+O R50S e o RG351MP **não têm GPIO de controle de WiFi mapeado** no userspace. O `rfkill` bloqueia o driver no nível do kernel (`phy0` = WiFi interno SDIO), mantendo o adaptador OTG USB (`wlan1`+) ativo.
+
+### Persistência da configuração
+
+A preferência é salva via `set_ee_setting wifi.internal.disabled <0|1>` em `/storage/.config/distribution/configs/distribution.conf`. No boot, `autostart.sh` relê esse valor:
+
+```bash
+# autostart.sh — linhas ~209-211
+if [ "$(get_ee_setting wifi.internal.disabled)" == "1" ]
+then
+  /usr/bin/batocera-internal-wifi disable-no-refresh
+fi
+```
+
+`disable-no-refresh` bloqueia o chip sem tentar reiniciar o connman, pois no boot o WiFi ainda não foi iniciado.
+
+### Fluxo do módulo (wifi_toggle_otg.sh)
+
+```
+Usuário abre Tools → WiFi Toggle (OTG)
+        │
+        ├─ wifi.internal.disabled == 1 (OTG ativo)
+        │       └─ Pergunta: voltar ao interno?
+        │               └─ YES → set_ee_setting 0 + batocera-internal-wifi enable
+        │
+        └─ wifi.internal.disabled != 1 (interno ativo, padrão)
+                ├─ Sem wlan1+ detectado → erro "adaptador não encontrado"
+                └─ Com wlan1+ detectado → pergunta: usar OTG?
+                        └─ YES → set_ee_setting 1 + batocera-internal-wifi disable
+```
+
+### Adaptadores OTG testados / drivers disponíveis
+
+Os drivers RTL já embutidos na distro que suportam adaptadores 5GHz:
+
+```
+RTL8812AU   — AC1200 dual-band (recomendado para 5GHz)
+RTL8821CU   — AC600 dual-band
+RTL8821AU   — AC600 dual-band
+RTL88x2BU   — AC1300 dual-band
+RTL8814AU   — AC1900 tri-band
+RTL8852BU   — AX1800 Wi-Fi 6
+```
+
+### Como compilar/testar alterações
+
+```bash
+# Rebuild rápido (só o pacote amberelec):
+DEVICE=RG351MP ARCH=aarch64 ./scripts/clean amberelec
+DEVICE=RG351MP ARCH=aarch64 ./scripts/build amberelec
+
+# Teste sem rebuild (cópia direta via SSH, senha: pipboy):
+scp packages/amberelec/config/distribution/modules/wifi_toggle_otg.sh \
+    root@<IP>:/usr/config/modules/
+scp packages/amberelec/sources/scripts/batocera-internal-wifi \
+    root@<IP>:/usr/bin/
+scp packages/amberelec/config/distribution/modules/gamelist.xml \
+    root@<IP>:/usr/config/modules/
+```
+
+Após copiar, reinicie o EmulationStation no dispositivo para que o `gamelist.xml` seja relido.
+
+### Observações para o Modelo de IA
+
+- O adaptador OTG USB aparece como `wlan1` (ou `wlan2`+); o interno é sempre `wlan0`
+- Nunca assumir que `batocera-internal-wifi` funciona via GPIO no R50S — usar rfkill
+- A variável `wifi.internal.disabled` já existia no `autostart.sh` antes desta feature; o que foi corrigido foi o suporte ao R50S/RG351MP no script `batocera-internal-wifi` (que antes terminava com `exit 1` para esses devices)
+- O `rfkill` é soft block — não corta alimentação do chip, apenas desabilita o driver
+
+---
+
 ## Observações para o Modelo de IA
 
 - Ao sugerir alterações de configuração de build, sempre verificar a hierarquia completa (distro → project → device)

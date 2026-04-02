@@ -12,44 +12,66 @@ do_help() {
 }
 
 do_enable() {
-   _enable
-   _refresh_connman
+  if [ "$USE_RFKILL" == "1" ]; then
+    # Desbloqueia o chip interno e reinicia o connman para detectar interfaces
+    _rfkill_unblock
+    _refresh_connman
+  else
+    _gpio_power 1
+    _refresh_connman
+  fi
 }
 do_disable() {
-  _disable
-  _refresh_connman
-}
-_enable() {
   if [ "$USE_RFKILL" == "1" ]; then
-    RFKILL_ID=$(rfkill list | awk -F: '/phy0/{print $1}' | head -1)
-    [ -n "$RFKILL_ID" ] && rfkill unblock "$RFKILL_ID"
+    # Para o connman primeiro, depois bloqueia — evita que ele reabra o chip
+    connmanctl disable wifi
+    sleep 1
+    _rfkill_block
   else
-    echo 1 > "$GPIO_WIFI_DEVICE"
+    connmanctl disable wifi
+    _gpio_power 0
   fi
 }
-_disable() {
-  if [ "$USE_RFKILL" == "1" ]; then
-    RFKILL_ID=$(rfkill list | awk -F: '/phy0/{print $1}' | head -1)
-    [ -n "$RFKILL_ID" ] && rfkill block "$RFKILL_ID"
+_rfkill_unblock() {
+  # Desbloqueia apenas o phy0 (WiFi interno SDIO), nunca o adaptador OTG USB
+  local id
+  id=$(rfkill list | awk -F: '/phy0/{print $1}' | tr -d ' ' | head -1)
+  if [ -n "$id" ]; then
+    rfkill unblock "$id"
   else
-    echo 0 > "$GPIO_WIFI_DEVICE"
+    rfkill unblock wifi
   fi
+}
+_rfkill_block() {
+  # Bloqueia apenas o phy0 (WiFi interno SDIO), nunca o adaptador OTG USB
+  local id
+  id=$(rfkill list | awk -F: '/phy0/{print $1}' | tr -d ' ' | head -1)
+  if [ -n "$id" ]; then
+    rfkill block "$id"
+  else
+    rfkill block wifi
+  fi
+}
+_gpio_power() {
+  echo "$1" > "$GPIO_WIFI_DEVICE"
 }
 
 _refresh_connman() {
     connmanctl disable wifi
-    while [[ "$counter" < 5 ]]; do
-        counter=$((counter +1))    
-        connmanctl enable wifi 
+    sleep 1
+    local counter=0
+    while [ "$counter" -lt 5 ]; do
+        counter=$((counter + 1))
+        connmanctl enable wifi
         wifi_scan=$(connmanctl scan wifi 2>&1)
-        echo "wifi scan: $wifi_scan"          
+        echo "wifi scan: $wifi_scan"
         if [[ "$wifi_scan" =~ Error ]]; then
-          echo "error retry"                
-          sleep 1           
-        else     
+          echo "error retry"
+          sleep 1
+        else
           break
-        fi     
-    done 
+        fi
+    done
 }
 
 
@@ -74,7 +96,11 @@ case "${ACTION}" in
         do_disable
         ;;
     "disable-no-refresh")
-        _disable
+        if [ "$USE_RFKILL" == "1" ]; then
+          _rfkill_block
+        else
+          _gpio_power 0
+        fi
         ;;
     *)
         do_help "${0}"

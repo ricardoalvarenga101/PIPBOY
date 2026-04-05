@@ -170,8 +170,8 @@ def download_update(current_release, existing_release, device, org, repo, update
       download(download_url_sha256, download_file_sha256)
     except HTTPError as e:
       if e.code == 404:
-          logger.info("Could not find release named PipBoy - falling back to AmberELEC")
-          download_file_name = f"AmberELEC-{device}.aarch64-{current_release}.tar"
+          logger.info("Could not find release named PipBoy - falling back to PipBoy")
+          download_file_name = f"PipBoy-{device}.aarch64-{current_release}.tar"
           download_file_name_sha256 = f"{download_file_name}.sha256"
           download_base_url = f"{repo}/releases/download/{current_release}"
           download_url = f"{download_base_url}/{download_file_name}"

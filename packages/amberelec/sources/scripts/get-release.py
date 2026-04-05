@@ -54,7 +54,7 @@ def main():
 
     message_stream(CONSOLE.CLEAR)
     message_stream(
-        f"{CONSOLE.AMBER}Amber{CONSOLE.WHITE}ELEC{CONSOLE.ENDC} Update Utility - Starting Update...\n")
+        f"{CONSOLE.AMBER}Pip{CONSOLE.WHITE}Boy{CONSOLE.ENDC} Update Utility - Starting Update...\n")
 
     if not online_status():
         message_stream(
@@ -156,7 +156,7 @@ def download_update(current_release, existing_release, device, org, repo, update
     downloaded_file = None
     repo = f"https://github.com/{org}/{repo}"
 
-    download_file_name = f"AmberELEC-{device}.aarch64-{current_release}.tar"
+    download_file_name = f"PipBoy-{device}.aarch64-{current_release}.tar"
     download_file_name_sha256 = f"{download_file_name}.sha256"
     download_base_url = f"{repo}/releases/download/{current_release}"
     download_url = f"{download_base_url}/{download_file_name}"
@@ -169,11 +169,9 @@ def download_update(current_release, existing_release, device, org, repo, update
       logger.info("checking for SHA")
       download(download_url_sha256, download_file_sha256)
     except HTTPError as e:
-    
-      # After we no longer have the possibility of '351ELEC' named releases - we can remove this
       if e.code == 404:
-          logger.info("Could not find release named AmberELEC - falling back to 351ELEC")
-          download_file_name = f"351ELEC-{device}.aarch64-{current_release}.tar"
+          logger.info("Could not find release named PipBoy - falling back to AmberELEC")
+          download_file_name = f"AmberELEC-{device}.aarch64-{current_release}.tar"
           download_file_name_sha256 = f"{download_file_name}.sha256"
           download_base_url = f"{repo}/releases/download/{current_release}"
           download_url = f"{download_base_url}/{download_file_name}"
@@ -371,18 +369,15 @@ def get_args():
     parser = argparse.ArgumentParser(
         description='Arguments for picking up release')
     parser.add_argument('--org',
-                        default="AmberELEC",
-                        help='Github organization. Allows testing with fork releases other than AmberELEC')
+                        default="ricardoalvarenga101",
+                        help='Github organization. Allows testing with fork releases other than PipBoy')
     parser.add_argument('--repo',
-                        default="AmberELEC",
-                        help='Github repository. Allows testing with repo releases other than AmberELEC')
+                        default="pipboy",
+                        help='Github repository. Allows testing with repo releases other than PipBoy')
     parser.add_argument('--band',
                         default="release",
-                        choices=['release', 'beta', 'prerelease', 'daily', 'dev'],
-                        help='''Update "band" ("channel"). Allows determining what latest release to get. 
-                             "daily" is for backwards compatibility and maps to "release"
-                             "beta" is for backwards compatibility and will map to 'prerelease'
-                             ''')
+                        choices=['release'],
+                        help='Update channel. Only "release" is supported.')
     parser.add_argument('--device',
                         choices=['RG351P', 'RG351V', 'RG351MP'],
                         help=f'Sets the appropriate device for testing.  Will fallback to contents of: {DEVICE_FILE}')
@@ -415,10 +410,7 @@ def get_args():
 
     set_global_args(args)
     
-    if args.band == "daily":
-        args.band = "release"
-    if args.band == "beta":
-        args.band = "prerelease"
+    args.band = "release"
 
     if not args.device:
         if os.path.isfile(DEVICE_FILE):
@@ -429,14 +421,7 @@ def get_args():
     if not args.existing_release:
         args.existing_release = get_existing_release()
     
-    existing_release = parse_release(args.existing_release, args.band)
-
-    #In case of beta, we need to check if it's a beta release too. Otherwise it will not parse due to channel being 'prerelease'
-    #TODO: If we end up with a lot of different bands - we may need to refactor this in the future
-    if not existing_release:
-      existing_release = parse_release(args.existing_release, "beta")
-    if not existing_release:
-      existing_release = parse_release(args.existing_release, "dev")
+    existing_release = parse_release(args.existing_release, "release")
     args.existing_release = existing_release
     return args
 

@@ -5,7 +5,7 @@
 O **PipBoy** é um firmware customizado e open source para consoles portáteis baseados no SoC **Rockchip RK3326**. É um fork do [AmberELEC](https://github.com/AmberELEC/AmberELEC), que por sua vez deriva do EmuELEC → CoreELEC → LibreELEC. O sistema é voltado para emulação de jogos retrô em hardware embarcado.
 
 - **Nome da distribuição:** `PipBoy` (definido em `distributions/AmberELEC/options` → `DISTRONAME`)
-- **Versão atual:** `r50s-20260331` (definida em `distributions/AmberELEC/version`)
+- **Versão atual:** `r50s-20260405` (definida em `distributions/AmberELEC/version`)
 - **Licença:** GPLv2-or-later
 - **Senha root:** `pipboy`
 - **Frontend:** EmulationStation
@@ -442,6 +442,63 @@ Após copiar, reinicie o EmulationStation no dispositivo para que o `gamelist.xm
 - Nunca assumir que `batocera-internal-wifi` funciona via GPIO no R50S — usar rfkill
 - A variável `wifi.internal.disabled` já existia no `autostart.sh` antes desta feature; o que foi corrigido foi o suporte ao R50S/RG351MP no script `batocera-internal-wifi` (que antes terminava com `exit 1` para esses devices)
 - O `rfkill` é soft block — não corta alimentação do chip, apenas desabilita o driver
+
+---
+
+## Sistema de Updates OTA
+
+### Arquivos envolvidos
+
+| Arquivo | Função |
+|---|---|
+| `packages/amberelec/sources/scripts/updatecheck` | Verifica se existe release nova (chamado pelo ES no boot) |
+| `packages/amberelec/sources/scripts/amberelec-upgrade` | Executa o download e reinicia o dispositivo |
+| `packages/amberelec/sources/scripts/get-release.py` | Script Python que consulta a API do GitHub e baixa o artefato |
+| `packages/amberelec/sources/scripts/postupdate.sh` | Roda uma vez após o update para migrar configurações |
+
+### Repositório de releases
+
+- **Organização:** `ricardoalvarenga101`
+- **Repositório:** `pipboy`
+- **Canal:** apenas `release` (prerelease/beta removidos)
+- Os defaults de `--org` e `--repo` estão hardcoded em `get-release.py`, `updatecheck` e `amberelec-upgrade`
+- Podem ser sobrescritos via `set_ee_setting updates.github.org` e `updates.github.repo` no `distribution.conf`
+
+### Formato da tag de release no GitHub
+
+O `parse_release()` só aceita tags no formato:
+- `YYYYMMDD` → ex: `20260405`
+- `YYYYMMDD-N` → ex: `20260405-1` (hotfix)
+
+> Não usar o valor de `LIBREELEC_VERSION` (ex: `r50s-20260405-...`) como tag — ele é o nome do artefato de build, não a tag do GitHub.
+
+### Nome dos artefatos de release
+
+Para cada device, os arquivos publicados na release do GitHub devem ser:
+```
+PipBoy-RG351MP.aarch64-<tag>.tar
+PipBoy-RG351MP.aarch64-<tag>.tar.sha256
+PipBoy-RG351P.aarch64-<tag>.tar
+PipBoy-RG351P.aarch64-<tag>.tar.sha256
+PipBoy-RG351V.aarch64-<tag>.tar
+PipBoy-RG351V.aarch64-<tag>.tar.sha256
+```
+
+O `.sha256` deve conter o hash gerado com `sha256sum <arquivo>.tar > <arquivo>.tar.sha256`.
+
+O `get-release.py` tenta `PipBoy-` primeiro; em caso de 404 faz fallback para `AmberELEC-` (compatibilidade com versões antigas).
+
+### O que o update preserva
+
+- A partição **SYSTEM** (`/flash`, `/usr`) é regravada integralmente
+- A partição **STORAGE** (`/storage`) nunca é apagada
+- **Preservados:** `distribution.conf`, configurações do RetroArch, gamelists, temas instalados, ROMs, saves, screenshots
+- **Sobrescritos:** splash de boot (`/usr/config/splash/`) e `logo.png` do ES (via `postupdate.sh`)
+- O `postupdate.sh` pode ajustar pontualmente o `distribution.conf` e `retroarch.cfg` para migrar configurações entre versões
+
+### Versão instalada no dispositivo
+
+Armazenada em `/storage/.config/.OS_VERSION` — deve conter a tag da release (ex: `20260405`). Atualizada automaticamente pelo `postupdate.sh`.
 
 ---
 

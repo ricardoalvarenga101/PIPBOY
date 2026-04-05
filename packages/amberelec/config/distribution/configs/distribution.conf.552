@@ -88,6 +88,8 @@ system.timezone=Europe/London
 updates.enabled=1
 updates.type=release
 global.themes.url=https://raw.githubusercontent.com/ricardoalvarenga101/pipboy-themes/refs/heads/master/themes.json
+updates.github.org=ricardoalvarenga101
+updates.github.repo=pipboy
 
 # fan profile - controls fan speed (values: default/performance/quiet)
 fan.profile=default

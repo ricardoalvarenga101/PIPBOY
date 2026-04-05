@@ -26,7 +26,7 @@
 	</game> -->
 	</game>
 
-	<game>
+	<!-- <game>
 		<path>./wifi_toggle_otg.sh</path>
 		<name>WiFi Toggle (OTG)</name>
 		<desc>Alterna entre o Wi-Fi interno (2.4GHz) e o adaptador via OTG (5GHz). O adaptador OTG deve estar conectado para ativar o modo 5GHz.</desc>
@@ -37,7 +37,7 @@
 		<genre>Script</genre>
 		<thumbnail>./downloaded_images/wifi-toggle-thumb.png</thumbnail>
 		<image>./downloaded_images/wifi-toggle.png</image>
-	</game>
+	</game> -->
 
 	<game>
 		<path>./Start PPSSPP.sh</path>
@@ -195,7 +195,7 @@
 		<image>./downloaded_images/filemanager.png</image>
 	</game>
 
-	<game>
+	<!-- <game>
 		<path>./SetTime.sh</path>
 		<name>Set Time</name>
 		<desc>Manually set time</desc>
@@ -206,7 +206,7 @@
 		<genre>Script</genre>
 		<thumbnail>./downloaded_images/settime-thumb.png</thumbnail>
 		<image>./downloaded_images/settime.png</image>
-	</game>
+	</game> -->
 
 	<game>
 		<path>./ppsspp_migrate.sh</path>

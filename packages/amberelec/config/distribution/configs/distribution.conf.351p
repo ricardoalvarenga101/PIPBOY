@@ -88,6 +88,8 @@ system.timezone=Europe/London
 updates.enabled=1
 updates.type=release
 global.themes.url=https://raw.githubusercontent.com/ricardoalvarenga101/pipboy-themes/refs/heads/master/themes.json
+updates.github.org=ricardoalvarenga101
+updates.github.repo=pipboy
 
 # ------------ H - HERE IT IS - GLOBAL EMULATOR CONFIGURATION ------------ #
 ## The global value will be used for all emulators, except if the value

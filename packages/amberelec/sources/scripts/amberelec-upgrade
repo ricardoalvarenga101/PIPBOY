@@ -8,19 +8,15 @@ CONSOLE_DEVICE=/dev/console
 
 LOG=/tmp/logs/351-elec-upgrade
 DIR=$(realpath $(dirname $0))
-BAND=$(get_ee_setting updates.type)
+BAND=release
 ORG=$(get_ee_setting updates.github.org)
 if [ "$ORG" == "" ]; then
-  ORG="AmberELEC"
+  ORG="ricardoalvarenga101"
 fi
 
 REPO=$(get_ee_setting updates.github.repo)
 if [ "$REPO" == "" ]; then
-  if [ "$BAND" == "prerelease" ] || [ "$BAND" == "beta" ]; then
-    REPO=AmberELEC-prerelease
-  else
-    REPO=AmberELEC
-  fi
+  REPO=pipboy
 fi
 
 FORCE=$(get_ee_setting updates.force)

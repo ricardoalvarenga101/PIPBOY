@@ -20,11 +20,11 @@ fi
 
 # If the user didn't provide the rclone config file the program script will end
 if [ ! -f "/roms/gamedata/rclone/rclone.conf" ]; then
-    text_viewer -w -e -m "ERROR: /roms/gamedata/rclone/rclone.conf is missing\nPlease provide the rclone.conf file.\n\nFor more information please check our website at: https://amberelec.org/Getting-to-Know-AmberELEC.html#cloud-backup" -t "AmberELEC Cloud Save Backup"
+    text_viewer -w -e -m "ERRO: /roms/gamedata/rclone/rclone.conf está ausente\nPor favor forneça o arquivo rclone.conf.\n\nPara mais informações, consulte: https://rclone.org/" -t "PipBoy — Backup na Nuvem"
     exit 0
 fi
 
-text_viewer -y -w -m "Do you want to backup your data on the cloud?" -t "AmberELEC Cloud Save Backup"
+text_viewer -y -w -m "Deseja fazer backup dos seus dados na nuvem?" -t "PipBoy — Backup na Nuvem"
 response=$?
 
 case $response in
@@ -36,6 +36,6 @@ case $response in
     21)
         clear > /dev/console
         rclone sync /storage/roms/ "$CLOUD_SYNC_REMOTE":"$CLOUD_SYNC_PATH" --filter-from /roms/gamedata/rclone/cloud-sync-rules.conf -P --config /roms/gamedata/rclone/rclone.conf --log-level DEBUG --log-file /tmp/logs/cloud-sync.log 2>&1 > /dev/console
-        text_viewer -m "Backup completed!" -t "AmberELEC Cloud Save Backup"
+        text_viewer -m "Backup concluído!" -t "PipBoy — Backup na Nuvem"
         ;;
 esac

@@ -28,10 +28,10 @@
 
 	<!-- <game>
 		<path>./wifi_toggle_otg.sh</path>
-		<name>Wifi Toggle (OTG)</name>
-		<desc>Alterna entre o Wi-Fi nativo e o Wi-Fi via OTG (USB-C). Permite ativar o adaptador OTG e reverter para o Wi-Fi interno.</desc>
-		<developer>rsalvarenga</developer>
-		<publisher>rsalvarenga</publisher>
+		<name>WiFi Toggle (OTG)</name>
+		<desc>Alterna entre o Wi-Fi interno (2.4GHz) e o adaptador via OTG (5GHz). O adaptador OTG deve estar conectado para ativar o modo 5GHz.</desc>
+		<developer>Ricardo Alvarenga</developer>
+		<publisher>Ricardo Alvarenga</publisher>
 		<rating>1.0</rating>
 		<releasedate>2026</releasedate>
 		<genre>Script</genre>
@@ -195,7 +195,7 @@
 		<image>./downloaded_images/filemanager.png</image>
 	</game>
 
-	<game>
+	<!-- <game>
 		<path>./SetTime.sh</path>
 		<name>Set Time</name>
 		<desc>Manually set time</desc>
@@ -206,7 +206,7 @@
 		<genre>Script</genre>
 		<thumbnail>./downloaded_images/settime-thumb.png</thumbnail>
 		<image>./downloaded_images/settime.png</image>
-	</game>
+	</game> -->
 
 	<game>
 		<path>./ppsspp_migrate.sh</path>

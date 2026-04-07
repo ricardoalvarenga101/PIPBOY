@@ -150,11 +150,12 @@ post_install() {
   echo "" >${INSTALL}/etc/issue
   yellow="\e[33m"
   cyan="\e[96m"
-  echo -e "${yellow} ______   __    ______  ${cyan}   ______    ______    __  __   " >>${INSTALL}/etc/issue
-  echo -e "${yellow}/\  == \ /\ \  /\  == \ ${cyan}  /\  == \  /\  __ \  /\ \_\ \ " >>${INSTALL}/etc/issue
-  echo -e "${yellow}\ \  _-/ \ \ \ \ \  _-/ ${cyan}  \ \  __<  \ \ \/\ \ \ \____ \\" >>${INSTALL}/etc/issue
-  echo -e "${yellow} \ \_\    \ \_\ \ \_\   ${cyan}   \ \_____\ \ \_____\ \/\_____\\" >>${INSTALL}/etc/issue
-  echo -e "${yellow}  \/_/     \/_/  \/_/   ${cyan}    \/_____/  \/_____/  \/_____/ " >>${INSTALL}/etc/issue
+  green="\e[32m"
+  echo -e "${yellow} ______   __    ______  ${green} ______    ______    __  __   " >>${INSTALL}/etc/issue
+  echo -e "${yellow}/\  == \ /\ \  /\  == \ ${green}/\  == \  /\  __ \  /\ \_\ \ " >>${INSTALL}/etc/issue
+  echo -e "${yellow}\ \  _-/ \ \ \ \ \  _-/ ${green}\ \  __<  \ \ \/\ \ \ \____ \\" >>${INSTALL}/etc/issue
+  echo -e "${yellow} \ \_\    \ \_\ \ \_\   ${green} \ \_____\ \ \_____\ \/\_____\\" >>${INSTALL}/etc/issue
+  echo -e "${yellow}  \/_/     \/_/  \/_/   ${green}  \/_____/  \/_____/  \/_____/ " >>${INSTALL}/etc/issue
   echo -e "\033[0m" >>${INSTALL}/etc/issue
   echo "" >>${INSTALL}/etc/issue
 

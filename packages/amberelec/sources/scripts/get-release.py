@@ -54,7 +54,7 @@ def main():
 
     message_stream(CONSOLE.CLEAR)
     message_stream(
-        f"{CONSOLE.AMBER}Pip{CONSOLE.WHITE}Boy{CONSOLE.ENDC} Update Utility - Starting Update...\n")
+        f"{CONSOLE.AMBER}PipBoy{CONSOLE.ENDC} Update Utility - Starting Update...\n")
 
     if not online_status():
         message_stream(

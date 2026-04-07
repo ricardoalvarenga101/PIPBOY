@@ -1,0 +1,39 @@
+From: PipBoy Project <pipboy@projectfork>
+Date: Mon, 6 Apr 2026 00:00:00 +0000
+Subject: [PATCH] dts: rk3326-r50s: disable uart1 to fix second SD card slot
+
+The &uart1 node was enabled and claimed GPIO1.C0-C3 (RXD, TXD, CTS, RTS)
+via uart1_xfer and uart1_cts pinctrl groups.
+
+The &sdio node (dwmmc@ff380000), which is wired to the second microSD
+card slot on the R50S hardware, relies on GPIO1.C0-C5 for its SDIO
+bus (CMD, CLK, D0-D3). Because uart1 probed first and locked those pins,
+the sdio controller could never acquire them, causing mmcblk1 to never
+appear in /dev.
+
+The UART1 pins are exposed only on the EXT Header (P2) — an external
+expansion header that does not exist in the Game Console R50S. Disabling
+uart1 has no functional impact on the device.
+
+Fixes: second SD card (mmcblk1) not detected after boot.
+
+Signed-off-by: PipBoy Project <pipboy@projectfork>
+---
+ arch/arm64/boot/dts/rockchip/rk3326-r50s-linux.dts | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3326-r50s-linux.dts b/arch/arm64/boot/dts/rockchip/rk3326-r50s-linux.dts
+--- a/arch/arm64/boot/dts/rockchip/rk3326-r50s-linux.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3326-r50s-linux.dts
+@@ -1201,7 +1201,8 @@
+ /*
+ 	EXT Header(P2) UART :
+ 	2(RXD:GPIO1.C0),3(TXD:GPIO1.C1),4(CTS:GPIO1.C2),5(RTS:GPIO1.C3)
++	Disabled: GPIO1.C0-C3 conflict with &sdio (second SD card slot, mmcblk1)
+ */
+ &uart1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&uart1_xfer &uart1_cts>;
+-	status = "okay";
++	status = "disabled";
+ };

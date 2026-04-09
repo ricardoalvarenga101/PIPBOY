@@ -11,6 +11,10 @@ DEVICE=$(tr -d '\0' < /sys/firmware/devicetree/base/model)
 # Set performance mode to start the boot
 performance
 
+# Clear framebuffer to black immediately so the old boot content isn't
+# visible while show_splash.sh decodes the PNG in the background.
+dd if=/dev/zero of=/dev/fb0 2>/dev/null || true
+
 # Show splash logo
 /usr/bin/show_splash.sh &
 
@@ -169,6 +173,23 @@ if [ "UPDATE" == "$(cat /storage/.config/boot.hint)" ]; then
 	echo -en '\e[0;0H\e[37mExecuting postupdate...\e[0m' >/dev/console
 	/usr/bin/postupdate.sh
 	echo "OK" > /storage/.config/boot.hint
+fi
+
+# Apply custom ES logo from the games partition (/games/splash/logo.png).
+# Uses checksum to only copy when the file actually changes — runs once per modification.
+CUSTOM_LOGO="/storage/roms/splash/logo.png"
+ES_LOGO="/storage/.config/emulationstation/resources/logo.png"
+LOGO_HASH_FILE="/storage/.config/splash/.logo.hash"
+if [ -f "${CUSTOM_LOGO}" ]; then
+  CURRENT_HASH=$(sha256sum "${CUSTOM_LOGO}" | cut -d' ' -f1)
+  STORED_HASH=""
+  [ -f "${LOGO_HASH_FILE}" ] && STORED_HASH=$(cat "${LOGO_HASH_FILE}")
+  if [ "${CURRENT_HASH}" != "${STORED_HASH}" ]; then
+    mkdir -p /storage/.config/emulationstation/resources
+    mkdir -p /storage/.config/splash
+    cp -f "${CUSTOM_LOGO}" "${ES_LOGO}"
+    echo "${CURRENT_HASH}" > "${LOGO_HASH_FILE}"
+  fi
 fi
 
 sync &

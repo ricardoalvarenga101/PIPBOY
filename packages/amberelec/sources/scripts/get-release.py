@@ -27,6 +27,7 @@ socket.setdefaulttimeout(60)
 class CONSOLE:
     AMBER = '\033[38;5;220m'
     WHITE = '\033[38;5;255m'
+    GREEN = '\033[38;5;46m'
     ENDC = '\033[0m'
     CLEAR = '\033c'
 
@@ -98,7 +99,7 @@ def main():
 
     message_stream(
         f"\nUpdating to: {current_release} from: {args.existing_release}\n")
-    message_stream(f"\nDownloading (each # = 1.25%)... \n")
+    message_stream(f"\nDownloading...\n")
     downloaded_file = download_update(
         current_release, args.existing_release, args.device, args.org, args.repo, args.update_dir, show_progress)
     if not downloaded_file:
@@ -333,29 +334,29 @@ def check_hash(local_file):
         return file_hash
 
 
-last_mod = 0
+last_percentage_shown = -1
 
-# Outputs progress in 80 #'s.  This is the width of the P/V
+# Shows download progress as an updating percentage in place
 
 
 def show_progress(block_num, block_size, total_size):
-    global last_mod
-    if last_mod == None:
-        last_mod = 0
+    global last_percentage_shown
     current_size = block_num * block_size
-    if current_size == 0.0:
+    if current_size == 0:
         return
 
-    percentage = ((current_size / total_size)*80)
-    mod_percentage = 10*percentage
-    mod = int(mod_percentage % 10)
-
-    if mod == 0 and last_mod != 0:
-        message_stream("#")
-        logger.debug(
-            f"Percentage: {percentage} mod: {mod} mod_percentage: {mod_percentage}")
-
-    last_mod = mod
+    if total_size > 0:
+        percentage = int(min(current_size / total_size, 1.0) * 100)
+        if percentage != last_percentage_shown:
+            last_percentage_shown = percentage
+            suffix = "\n" if percentage >= 100 else ""
+            with open(console, 'w') as f:
+                print(f"\r  {CONSOLE.GREEN}{percentage:3d}%{CONSOLE.ENDC}{suffix}", end="", file=f, flush=True)
+            logger.debug(f"Download progress: {percentage}%")
+    else:
+        mb = current_size / (1024 * 1024)
+        with open(console, 'w') as f:
+            print(f"\r  {CONSOLE.GREEN}{mb:.1f} MB{CONSOLE.ENDC}", end="", file=f, flush=True)
 
 # Downloads a file
 

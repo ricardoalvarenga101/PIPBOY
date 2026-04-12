@@ -1,6 +1,6 @@
 # PIPBOY Game Console R50S / RG351MP
 
-![Splash Screen](https://github.com/ricardoalvarenga101/PIPBOY/blob/r50s-configuration/distributions/AmberELEC/splash/splash-854l.png?raw=true)
+![Splash Screen](https://github.com/ricardoalvarenga101/PIPBOY/blob/main/distributions/AmberELEC/splash/splash-854l.png?raw=true)
 
 ---
 

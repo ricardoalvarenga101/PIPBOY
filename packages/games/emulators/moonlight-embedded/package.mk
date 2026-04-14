@@ -14,6 +14,11 @@ PKG_GIT_CLONE_BRANCH="master"
 pre_configure_target() {
   cd ${PKG_BUILD}
   sed -i 's/\-O[23]//' CMakeLists.txt
+
+  # Fix for older kernels where struct input_event uses time.tv_sec/tv_usec
+  # instead of input_event_sec/input_event_usec macros (added in kernel 4.16+)
+  sed -i 's/ev->input_event_sec/ev->time.tv_sec/g; s/ev->input_event_usec/ev->time.tv_usec/g' \
+    src/input/evdev.c
 }
 
 PKG_CMAKE_OPTS_TARGET+="-DCMAKE_BUILD_TYPE=Release \

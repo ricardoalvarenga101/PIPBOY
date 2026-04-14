@@ -17,6 +17,7 @@
 #   bitrate=2500
 #   codec=hevc
 #   app=Desktop
+#   host=192.168.100.46
 #
 
 # Resoluções suportadas - Presets:

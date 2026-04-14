@@ -77,15 +77,16 @@ while true; do
         --clear \
         --no-cancel \
         --menu "Configure as opcoes de streaming:" \
-        18 60 8 \
+        20 60 9 \
         "1" "Resolucao:  ${resolution}" \
         "2" "FPS:        ${fps}" \
         "3" "Bitrate:    ${bitrate} kbps" \
         "4" "Codec:      ${codec}" \
         "5" "App Padrao: ${app:-(sem selecao)}" \
         "6" "Host / IP:  ${host:-(nao configurado)}" \
-        "7" "Salvar e Sair" \
-        "8" "Sair sem Salvar" \
+        "7" "Parear com PC" \
+        "8" "Salvar e Sair" \
+        "9" "Sair sem Salvar" \
         2>&1 > /dev/console)
 
     [ $? -ne 0 ] && Quit
@@ -217,6 +218,36 @@ while true; do
             ;;
 
         7)
+            if [ -z "${host}" ]; then
+                dialog \
+                    --title " Parear com PC " \
+                    --msgbox "Host nao configurado.\n\nConfigure o Host / IP primeiro (opcao 6)." \
+                    8 50 2>&1 > /dev/console
+            else
+                dialog \
+                    --title " Parear com PC " \
+                    --yesno "Parear com ${host}?\n\nUm PIN sera exibido no terminal.\nDigite-o no pop-up que aparecer\nno PC para confirmar o pareamento." \
+                    10 54 2>&1 > /dev/console
+                if [ $? -eq 0 ]; then
+                    # Executa pairing em foreground e exibe saida no console
+                    pair_output=$(/usr/bin/moonlight pair "${host}" 2>&1)
+                    pair_exit=$?
+                    if [ $pair_exit -eq 0 ]; then
+                        dialog \
+                            --title " Parear com PC " \
+                            --msgbox "Pareamento concluido!\n\n${pair_output}" \
+                            10 54 2>&1 > /dev/console
+                    else
+                        dialog \
+                            --title " Parear com PC " \
+                            --msgbox "Erro no pareamento:\n\n${pair_output}" \
+                            10 54 2>&1 > /dev/console
+                    fi
+                fi
+            fi
+            ;;
+
+        8)
             cat > "${MOONLIGHT_CONFIG}" << EOF
 # Configuracao do Moonlight Embedded para PipBoy
 # Gerado automaticamente: $(date)
@@ -236,7 +267,7 @@ EOF
             Quit
             ;;
 
-        8)
+        9)
             Quit
             ;;
     esac

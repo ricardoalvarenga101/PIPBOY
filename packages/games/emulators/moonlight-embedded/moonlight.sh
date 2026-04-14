@@ -13,9 +13,8 @@ MOONLIGHT_CACHE="/storage/.cache/moonlight-embedded"
 mkdir -p "${MOONLIGHT_CONFIG}"
 mkdir -p "${MOONLIGHT_CACHE}"
 
-# Export environment variables for proper display
-export SDL_VIDEODRIVER=fbcon
-export SDL_FBDEV=/dev/fb0
+# Configurar ambiente SDL para DRM/KMS (RK3326 nao usa fbcon)
+export SDL_VIDEODRIVER=kmsdrm
 
 # Run moonlight
 exec "${MOONLIGHT_BIN}" "$@"

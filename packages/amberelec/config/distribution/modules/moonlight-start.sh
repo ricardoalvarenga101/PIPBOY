@@ -51,9 +51,8 @@ fi
 
 MOONLIGHT_ARGS="${MOONLIGHT_ARGS} ${host}"
 
-# Configurar ambiente SDL para framebuffer
-export SDL_VIDEODRIVER=fbcon
-export SDL_FBDEV=/dev/fb0
+# Configurar ambiente SDL para DRM/KMS (RK3326 nao usa fbcon)
+export SDL_VIDEODRIVER=kmsdrm
 
 # Iniciar streaming
 eval "${MOONLIGHT_BIN} ${MOONLIGHT_ARGS}"

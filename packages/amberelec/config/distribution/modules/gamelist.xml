@@ -249,4 +249,18 @@
 		<image>./downloaded_images/leds.png</image>
 	</game>
 
+	<game>
+		<path>./moonlight-config.sh</path>
+		<hidden>false</hidden>
+		<name>Moonlight Settings</name>
+		<desc>Configure Moonlight Embedded - resolução, FPS, bitrate e codec</desc>
+		<developer>Ricardo Alvarenga</developer>
+		<publisher>Ricardo Alvarenga</publisher>
+		<rating>1.0</rating>
+		<releasedate>2026</releasedate>
+		<genre>Script</genre>
+		<thumbnail>./downloaded_images/moonlight-config-thumb.png</thumbnail>
+		<image>./downloaded_images/moonlight-config.png</image>
+	</game>
+
 </gameList>

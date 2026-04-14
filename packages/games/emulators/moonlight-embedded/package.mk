@@ -30,24 +30,26 @@ PKG_CMAKE_OPTS_TARGET+="-DCMAKE_BUILD_TYPE=Release \
 
 makeinstall_target() {
   mkdir -p ${INSTALL}/usr/bin
+  mkdir -p ${INSTALL}/usr/lib
   mkdir -p ${INSTALL}/usr/config/moonlight-embedded
   
   # Copy binary
   cp ${PKG_BUILD}/moonlight ${INSTALL}/usr/bin/moonlight
   chmod +x ${INSTALL}/usr/bin/moonlight
   
-  # Copy default configuration files from package dir
-  if [ -d ${PKG_DIR}/config ]; then
-    cp -rf ${PKG_DIR}/config/* ${INSTALL}/usr/config/moonlight-embedded/
-    find ${INSTALL}/usr/config/moonlight-embedded -type f -name "*.sh" -exec chmod +x {} \;
-  fi
+  # Copy shared libraries
+  cp ${PKG_BUILD}/libgamestream/libgamestream.so.2.7.1 ${INSTALL}/usr/lib/
+  ln -sf libgamestream.so.2.7.1 ${INSTALL}/usr/lib/libgamestream.so.4
+  ln -sf libgamestream.so.4 ${INSTALL}/usr/lib/libgamestream.so
+  cp ${PKG_BUILD}/libgamestream/libmoonlight-common.so.2.7.1 ${INSTALL}/usr/lib/
+  ln -sf libmoonlight-common.so.2.7.1 ${INSTALL}/usr/lib/libmoonlight-common.so.4
+  ln -sf libmoonlight-common.so.4 ${INSTALL}/usr/lib/libmoonlight-common.so
+  
+  # Copy default config example
+  cp ${PKG_DIR}/config/moonlight.conf.example ${INSTALL}/usr/config/moonlight-embedded/
   
   # Copy launcher script
   cp ${PKG_DIR}/moonlight.sh ${INSTALL}/usr/bin/moonlight.sh
   chmod +x ${INSTALL}/usr/bin/moonlight.sh
   
-  # Copy config utility to modules directory for easy access
-  mkdir -p ${INSTALL}/usr/config/modules
-  cp ${PKG_DIR}/config/moonlight-config.sh ${INSTALL}/usr/config/modules/
-  chmod +x ${INSTALL}/usr/config/modules/moonlight-config.sh
 }

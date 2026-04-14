@@ -2,12 +2,12 @@
 # Copyright (C) 2024-present Ricardo Alvarenga
 
 PKG_NAME="moonlight-embedded"
-PKG_VERSION="5.0.1"
+PKG_VERSION="775444287305849ebdf4736c75298ad0713e2d5d"
 PKG_LICENSE="GPLv3"
-PKG_SITE="https://github.com/irtimmer/moonlight-embedded"
+PKG_SITE="https://github.com/moonlight-stream/moonlight-embedded"
 PKG_URL="${PKG_SITE}.git"
-PKG_DEPENDS_TARGET="toolchain libcurl libevdev libopus openssl SDL2 alsa-lib"
-PKG_LONGDESC="Moonlight Embedded - NVIDIA GameStream Client for Embedded Systems"
+PKG_DEPENDS_TARGET="toolchain curl libevdev opus openssl SDL2 alsa-lib"
+PKG_LONGDESC="Moonlight Embedded v2.7.1 - NVIDIA GameStream Client for Embedded Systems"
 PKG_TOOLCHAIN="cmake-make"
 PKG_GIT_CLONE_BRANCH="master"
 

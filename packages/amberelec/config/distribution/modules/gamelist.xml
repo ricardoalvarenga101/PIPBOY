@@ -12,32 +12,7 @@
 		<genre>Script</genre>
 		<thumbnail>./downloaded_images/filemanager-thumb.png</thumbnail>
 		<image>./downloaded_images/filemanager.png</image>	
-	<!-- <game>
-		<path>./games_to_sd.sh</path>
-		<name>Games to SD</name>
-		<desc>Mapeia jogos, saves e configs para um novo diretório (ex: SD externo), substituindo o GAMES padrão. Permite reverter.</desc>
-		<developer>AmberELEC</developer>
-		<publisher>AmberELEC</publisher>
-		<rating>1.0</rating>
-		<releasedate>2026</releasedate>
-		<genre>Script</genre>
-		<thumbnail>./downloaded_images/games_to_sd-thumb.png</thumbnail>
-		<image>./downloaded_images/games_to_sd.png</image>
-	</game> -->
 	</game>
-
-	<!-- <game>
-		<path>./wifi_toggle_otg.sh</path>
-		<name>WiFi Toggle (OTG)</name>
-		<desc>Alterna entre o Wi-Fi interno (2.4GHz) e o adaptador via OTG (5GHz). O adaptador OTG deve estar conectado para ativar o modo 5GHz.</desc>
-		<developer>Ricardo Alvarenga</developer>
-		<publisher>Ricardo Alvarenga</publisher>
-		<rating>1.0</rating>
-		<releasedate>2026</releasedate>
-		<genre>Script</genre>
-		<thumbnail>./downloaded_images/wifi-toggle-thumb.png</thumbnail>
-		<image>./downloaded_images/wifi-toggle.png</image>
-	</game> -->
 
 	<game>
 		<path>./Start PPSSPP.sh</path>
@@ -117,19 +92,6 @@
 		<image>./downloaded_images/clean.png</image>
 	</game>
 
-	<!-- <game>
-		<path>./usbmount.sh</path>
-		<name>Mount/Unmount USB drive</name>
-		<desc>Mounts/Unmounts a USB drive connected to the OTG port</desc>
-		<developer>AmberELEC</developer>
-		<publisher>AmberELEC</publisher>
-		<rating>1.0</rating>
-		<releasedate>2021</releasedate>
-		<genre>Script</genre>
-		<thumbnail>./downloaded_images/usb-thumb.png</thumbnail>
-		<image>./downloaded_images/usb.png</image>
-	</game> -->
-
 	<game>
 		<path>./psx_create_m3u.sh</path>
 		<name>PSX - Create m3u files</name>
@@ -195,19 +157,6 @@
 		<image>./downloaded_images/filemanager.png</image>
 	</game>
 
-	<!-- <game>
-		<path>./SetTime.sh</path>
-		<name>Set Time</name>
-		<desc>Manually set time</desc>
-		<developer>AmberELEC</developer>
-		<publisher>AmberELEC</publisher>
-		<rating>1.0</rating>
-		<releasedate>2023</releasedate>
-		<genre>Script</genre>
-		<thumbnail>./downloaded_images/settime-thumb.png</thumbnail>
-		<image>./downloaded_images/settime.png</image>
-	</game> -->
-
 	<game>
 		<path>./ppsspp_migrate.sh</path>
 		<name>RA PPSSPP Save Migration tool</name>
@@ -220,21 +169,6 @@
 		<thumbnail>./downloaded_images/ppsspp_migrate-thumb.png</thumbnail>
 		<image>./downloaded_images/ppsspp_migrate.png</image>
 	</game>
-
-	<!-- <game>
-		<path>./display_fix.sh</path>
-		<hidden>false</hidden>
-		<name>Display timing Fix</name>
-		<desc>This will fix display timing issues for some RG351MP/V devices.</desc>
-		<developer>AmberELEC</developer>
-		<publisher>AmberELEC</publisher>
-		<rating>1.0</rating>
-		<releasedate>2022</releasedate>
-		<genre>Script</genre>
-		<thumbnail>./downloaded_images/timing-thumb.png</thumbnail>
-		<image>./downloaded_images/timing.png</image>
-	</game> -->
-
 	<game>
 		<path>./joyleds_conf.sh</path>
 		<hidden>false</hidden>

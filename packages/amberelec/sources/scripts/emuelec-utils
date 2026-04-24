@@ -92,7 +92,7 @@ esac
 }
 
 function ee_backup() {
-        BACKUPFILE="/storage/roms/backup/AmberELEC_BACKUP.zip"
+        BACKUPFILE="/storage/roms/backup/PipBoy_BACKUP.zip"
         mkdir -p "/storage/roms/backup"
 
         case "${1}" in

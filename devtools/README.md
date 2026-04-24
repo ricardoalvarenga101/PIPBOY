@@ -8,3 +8,5 @@ DEVICE=RG351MP ARCH=aarch64 ./scripts/build_distro emulationstation
 rm build.PipBoy-RG351MP.aarch64/.stamps/amberelec/build_target
 
 make RG351MP
+
+ssh-keygen -f "/home/rialvarenga/.ssh/known_hosts" -R "192.168.100.120"

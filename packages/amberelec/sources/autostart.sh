@@ -26,7 +26,7 @@ sysctl vm.swappiness=1
 
 # Restore config if backup exists
 BPATH="/storage/roms/backup/"
-BACKUPFILE="${BPATH}/AmberELEC_BACKUP.zip"
+BACKUPFILE="${BPATH}/PipBoy_BACKUP.zip"
 
 if [ -e "${BPATH}/.restore" ]
 then

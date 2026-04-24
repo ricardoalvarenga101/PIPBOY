@@ -99,15 +99,16 @@ def main():
 
     message_stream(
         f"\nUpdating to: {current_release} from: {args.existing_release}\n")
-    message_stream(f"\nDownloading...\n")
+    message_stream(f"\nDownloading update for {args.device}...\n")
+    message_stream(f"  File: PipBoy-{args.device}.aarch64-{current_release}.tar\n\n")
     downloaded_file = download_update(
         current_release, args.existing_release, args.device, args.org, args.repo, args.update_dir, show_progress)
     if not downloaded_file:
-        message_stream("ERROR: Could not download update.")
+        message_stream("\n\nERROR: Could not download update.")
         sys.exit(1)
     else:
         message_stream(
-            f"\nFile: {os.path.basename(downloaded_file)} downloaded successfully.\n")
+            f"\n\n{CONSOLE.GREEN}✓{CONSOLE.ENDC} File: {os.path.basename(downloaded_file)} downloaded successfully.\n")
 
 def download_needed(existing_release, current_release):
 
@@ -168,10 +169,13 @@ def download_update(current_release, existing_release, device, org, repo, update
 
     try:
       logger.info("checking for SHA")
+      message_stream(f"  {CONSOLE.AMBER}•{CONSOLE.ENDC} Downloading checksum...")
       download(download_url_sha256, download_file_sha256)
+      message_stream(" done\n")
     except HTTPError as e:
       if e.code == 404:
           logger.info("Could not find release named PipBoy - falling back to PipBoy")
+          message_stream(f"\n  {CONSOLE.AMBER}•{CONSOLE.ENDC} Fallback to standard naming...\n")
           download_file_name = f"PipBoy-{device}.aarch64-{current_release}.tar"
           download_file_name_sha256 = f"{download_file_name}.sha256"
           download_base_url = f"{repo}/releases/download/{current_release}"
@@ -182,17 +186,26 @@ def download_update(current_release, existing_release, device, org, repo, update
 
     sha256 = load_file_to_string(download_file_sha256).split(" ")[0]
     if os.path.isfile(download_file):
+        message_stream(f"\n  {CONSOLE.AMBER}•{CONSOLE.ENDC} Verifying existing file...")
         file_hash = check_hash(download_file)
         if file_hash != sha256:
             logger.warning(
                 f"\nLocal file: {os.path.basename(download_file)} ({file_hash}) does not match hash from github.  Removing and re-downloading...\n")
+            message_stream(f"\n  {CONSOLE.AMBER}•{CONSOLE.ENDC} File mismatch - removing and re-downloading...\n")
             os.remove(download_file)
+        else:
+            message_stream(" verified\n")
 
     if not os.path.isfile(download_file):
+        message_stream(f"\n  {CONSOLE.AMBER}•{CONSOLE.ENDC} Downloading image file:\n\n")
         download(download_url, download_file, show_progress)
+        message_stream(f"\n\n  {CONSOLE.AMBER}•{CONSOLE.ENDC} Verifying file integrity... ")
         file_hash = check_hash(download_file)
         if file_hash != sha256:
+            message_stream(f"{CONSOLE.RED}FAILED{CONSOLE.ENDC}\n")
+            logger.error(f"Hash mismatch: {file_hash} != {sha256}")
             return None
+        message_stream(f"{CONSOLE.GREEN}OK{CONSOLE.ENDC}\n")
 
     return download_file
 
@@ -335,24 +348,50 @@ def check_hash(local_file):
 
 
 last_percentage_shown = -1
+download_start_time = 0
 
-# Shows download progress as an updating percentage in place
+# Shows download progress as an updating percentage with visual bar
 
 
 def show_progress(block_num, block_size, total_size):
-    global last_percentage_shown
+    global last_percentage_shown, download_start_time
     current_size = block_num * block_size
     if current_size == 0:
+        download_start_time = time.time()
         return
 
     if total_size > 0:
         percentage = int(min(current_size / total_size, 1.0) * 100)
         if percentage != last_percentage_shown:
             last_percentage_shown = percentage
+            
+            # Calculate speed and ETA
+            elapsed_time = time.time() - download_start_time
+            if elapsed_time > 0:
+                speed_mbps = (current_size / (1024 * 1024)) / elapsed_time
+                if percentage < 100:
+                    remaining_size = total_size - current_size
+                    eta_seconds = remaining_size / (speed_mbps * 1024 * 1024) if speed_mbps > 0 else 0
+                    eta_str = f"{int(eta_seconds)}s"
+                else:
+                    eta_str = "Done"
+            else:
+                speed_mbps = 0
+                eta_str = "--"
+            
+            # Create progress bar
+            bar_length = 25
+            filled = int(bar_length * percentage / 100)
+            bar = f"{'▰' * filled}{'▱' * (bar_length - filled)}"
+            
+            # Format sizes
+            current_mb = current_size / (1024 * 1024)
+            total_mb = total_size / (1024 * 1024)
+            
             suffix = "\n" if percentage >= 100 else ""
             with open(console, 'w') as f:
-                print(f"\r  {CONSOLE.GREEN}{percentage:3d}%{CONSOLE.ENDC}{suffix}", end="", file=f, flush=True)
-            logger.debug(f"Download progress: {percentage}%")
+                print(f"\r  {CONSOLE.GREEN}{bar}{CONSOLE.ENDC} {percentage:3d}% | {current_mb:6.1f}/{total_mb:.1f} MB | {speed_mbps:5.2f} MB/s | ETA: {eta_str}{suffix}", end="", file=f, flush=True)
+            logger.debug(f"Download progress: {percentage}% - {speed_mbps:.2f} MB/s - ETA: {eta_str}")
     else:
         mb = current_size / (1024 * 1024)
         with open(console, 'w') as f:

@@ -1,6 +1,14 @@
 # SPDX-License-Identifier: GPL-2.0
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
+# Color codes for better feedback
+GREEN='\033[38;5;46m'
+AMBER='\033[38;5;220m'
+RED='\033[38;5;196m'
+RESET='\033[0m'
+CHECK_MARK='[✓]'
+ERROR_MARK='[✗]'
+
 [ -z "$SYSTEM_ROOT" ] && SYSTEM_ROOT=""
 [ -z "$BOOT_ROOT" ] && BOOT_ROOT="/flash"
 [ -z "$BOOT_PART" ] && BOOT_PART=$(df "$BOOT_ROOT" | tail -1 | awk {' print $1 '})
@@ -53,51 +61,126 @@ for arg in $(cat /proc/cmdline); do
 done
 
 CONFS=$SYSTEM_ROOT/usr/share/bootloader/extlinux/*.conf
+CONF_COUNT=0
+CONF_FAILED=0
 
+echo -e "${AMBER}Updating bootloader configurations...${RESET}"
 for all_conf in $CONFS; do
   conf="$(basename ${all_conf})"
-  echo "Updating ${conf}..."
-  cp -p $SYSTEM_ROOT/usr/share/bootloader/extlinux/${conf} $BOOT_ROOT/extlinux/${conf} &>/dev/null
-  sed -e "s/@BOOT_UUID@/$BOOT_UUID/" \
-      -e "s/@DISK_UUID@/$DISK_UUID/" \
-      -i $BOOT_ROOT/extlinux/${conf}
+  echo -ne "  ${AMBER}⧳${RESET} Updating ${conf}... "
+  if cp -p $SYSTEM_ROOT/usr/share/bootloader/extlinux/${conf} $BOOT_ROOT/extlinux/${conf} 2>/dev/null; then
+    if sed -e "s/@BOOT_UUID@/$BOOT_UUID/" \
+        -e "s/@DISK_UUID@/$DISK_UUID/" \
+        -i $BOOT_ROOT/extlinux/${conf} 2>/dev/null; then
+      echo -e "${GREEN}${CHECK_MARK}${RESET}"
+      CONF_COUNT=$((CONF_COUNT + 1))
+    else
+      echo -e "${RED}${ERROR_MARK}${RESET} (sed failed)"
+      CONF_FAILED=$((CONF_FAILED + 1))
+    fi
+  else
+    echo -e "${RED}${ERROR_MARK}${RESET} (copy failed)"
+    CONF_FAILED=$((CONF_FAILED + 1))
+  fi
 done
 
 if [ -f $SYSTEM_ROOT/usr/share/bootloader/boot.ini ]; then
-  echo "Updating boot.ini..."
-  cp -p $SYSTEM_ROOT/usr/share/bootloader/boot.ini $BOOT_ROOT/boot.ini &>/dev/null
+  echo -ne "  ${AMBER}⧳${RESET} Updating boot.ini... "
+  if cp -p $SYSTEM_ROOT/usr/share/bootloader/boot.ini $BOOT_ROOT/boot.ini 2>/dev/null; then
+    echo -e "${GREEN}${CHECK_MARK}${RESET}"
+  else
+    echo -e "${RED}${ERROR_MARK}${RESET}"
+  fi
 fi
 
 # update device tree
-  for all_dtb in $SYSTEM_ROOT/usr/share/bootloader/*.dtb; do
-    dtb=$(basename $all_dtb)
-      echo -n "Updating $dtb... "
-      cp -p $SYSTEM_ROOT/usr/share/bootloader/$dtb $BOOT_ROOT &>/dev/null
-      echo "done"
-  done
+echo -e "${AMBER}Updating device trees...${RESET}"
+DTB_COUNT=0
+DTB_FAILED=0
+for all_dtb in $SYSTEM_ROOT/usr/share/bootloader/*.dtb; do
+  dtb=$(basename $all_dtb)
+  echo -ne "  ${AMBER}⧳${RESET} Updating $dtb... "
+  if cp -p $SYSTEM_ROOT/usr/share/bootloader/$dtb $BOOT_ROOT/$dtb 2>/dev/null; then
+    echo -e "${GREEN}${CHECK_MARK}${RESET}"
+    DTB_COUNT=$((DTB_COUNT + 1))
+  else
+    echo -e "${RED}${ERROR_MARK}${RESET}"
+    DTB_FAILED=$((DTB_FAILED + 1))
+  fi
+done
 
 # update bootloader
-  if [ -f $SYSTEM_ROOT/usr/share/bootloader/idbloader.img ]; then
-    echo -n "Updating idbloader.img... "
-    dd if=$SYSTEM_ROOT/usr/share/bootloader/idbloader.img of=$BOOT_DISK bs=32k seek=1 conv=fsync &>/dev/null
-    echo "done"
+echo -e "${AMBER}Updating bootloader images...${RESET}"
+BL_COUNT=0
+BL_FAILED=0
+if [ -f $SYSTEM_ROOT/usr/share/bootloader/idbloader.img ]; then
+  echo -ne "  ${AMBER}⧳${RESET} Updating idbloader.img... "
+  if dd if=$SYSTEM_ROOT/usr/share/bootloader/idbloader.img of=$BOOT_DISK bs=32k seek=1 conv=fsync 2>/dev/null; then
+    echo -e "${GREEN}${CHECK_MARK}${RESET}"
+    BL_COUNT=$((BL_COUNT + 1))
+  else
+    echo -e "${RED}${ERROR_MARK}${RESET}"
+    BL_FAILED=$((BL_FAILED + 1))
   fi
-  if [ -f $SYSTEM_ROOT/usr/share/bootloader/uboot.img ]; then
-    echo -n "Updating uboot.img... "
-    dd if=$SYSTEM_ROOT/usr/share/bootloader/uboot.img of=$BOOT_DISK bs=64k seek=128 conv=fsync &>/dev/null
-    echo "done"
+fi
+if [ -f $SYSTEM_ROOT/usr/share/bootloader/uboot.img ]; then
+  echo -ne "  ${AMBER}⧳${RESET} Updating uboot.img... "
+  if dd if=$SYSTEM_ROOT/usr/share/bootloader/uboot.img of=$BOOT_DISK bs=64k seek=128 conv=fsync 2>/dev/null; then
+    echo -e "${GREEN}${CHECK_MARK}${RESET}"
+    BL_COUNT=$((BL_COUNT + 1))
+  else
+    echo -e "${RED}${ERROR_MARK}${RESET}"
+    BL_FAILED=$((BL_FAILED + 1))
   fi
-  if [ -f $SYSTEM_ROOT/usr/share/bootloader/trust.img ]; then
-    echo -n "Updating trust.img... "
-    dd if=$SYSTEM_ROOT/usr/share/bootloader/trust.img of=$BOOT_DISK bs=64k seek=192 conv=fsync &>/dev/null
-    echo "done"
+fi
+if [ -f $SYSTEM_ROOT/usr/share/bootloader/trust.img ]; then
+  echo -ne "  ${AMBER}⧳${RESET} Updating trust.img... "
+  if dd if=$SYSTEM_ROOT/usr/share/bootloader/trust.img of=$BOOT_DISK bs=64k seek=192 conv=fsync 2>/dev/null; then
+    echo -e "${GREEN}${CHECK_MARK}${RESET}"
+    BL_COUNT=$((BL_COUNT + 1))
+  else
+    echo -e "${RED}${ERROR_MARK}${RESET}"
+    BL_FAILED=$((BL_FAILED + 1))
   fi
+fi
 
 # mount $BOOT_ROOT r/o
-  sync
-  mount -o remount,ro $BOOT_ROOT &>/dev/null
-  
+echo -e "${AMBER}Finalizing...${RESET}"
+sync
+if mount -o remount,ro $BOOT_ROOT 2>/dev/null; then
+  echo -e "  ${GREEN}${CHECK_MARK}${RESET} Boot partition remounted (read-only)"
+else
+  echo -e "  ${RED}${ERROR_MARK}${RESET} Failed to remount boot partition"
+fi
+
 # Leave a hint that we just did an update
 echo "UPDATE" > /storage/.config/boot.hint
-
 sync
+
+# Display summary
+echo ""
+echo -e "${AMBER}════════════════════════════════════${RESET}"
+echo -e "${AMBER}  Update Summary${RESET}"
+echo -e "${AMBER}════════════════════════════════════${RESET}"
+echo -e "  Configurations: ${GREEN}${CONF_COUNT} OK${RESET}"
+if [ $CONF_FAILED -gt 0 ]; then
+  echo -e "                 ${RED}${CONF_FAILED} FAILED${RESET}"
+fi
+echo -e "  Device Trees:   ${GREEN}${DTB_COUNT} OK${RESET}"
+if [ $DTB_FAILED -gt 0 ]; then
+  echo -e "                 ${RED}${DTB_FAILED} FAILED${RESET}"
+fi
+echo -e "  Bootloader:     ${GREEN}${BL_COUNT} OK${RESET}"
+if [ $BL_FAILED -gt 0 ]; then
+  echo -e "                 ${RED}${BL_FAILED} FAILED${RESET}"
+fi
+echo -e "${AMBER}════════════════════════════════════${RESET}"
+echo ""
+
+# Check for failures
+if [ $((CONF_FAILED + DTB_FAILED + BL_FAILED)) -gt 0 ]; then
+  echo -e "${RED}WARNING: Some updates failed!${RESET}"
+  exit 1
+else
+  echo -e "${GREEN}All bootloader updates completed successfully!${RESET}"
+fi
